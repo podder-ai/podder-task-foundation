@@ -6,7 +6,6 @@ from .config import Config
 from .context import Context
 from .mode import MODE
 from .payload import Payload
-from .process import Process
 
 
 class CLI(object):

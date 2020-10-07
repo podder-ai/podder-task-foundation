@@ -2,8 +2,6 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
-from PIL import Image
-
 from .objects import Array, Dictionary, Object, factory
 
 

@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 from .config import Config
-from .exceptions import DirectoryNotFoundError, TargetFileNotFoundError
+from .exceptions import DirectoryNotFoundError
 
 
 class File(object):

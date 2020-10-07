@@ -7,6 +7,11 @@ authors = ["Takaaki Mizuno <takaaki.mizuno@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 pillow = "^7.2.0"
+python-dotenv = "^0.14.0"
+colorlog = "^4.2.1"
+PyYAML = "^5.3.1"
+toml = "^0.10.1"
+numpy = "^1.19.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
