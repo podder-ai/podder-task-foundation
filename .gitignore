@@ -1,0 +1,34 @@
+env
+venv
+.venv
+
+# python bytecode files
+*.pyc
+__pycache__/
+
+.mypy_cache/
+.coverage
+.pytest_cache/
+
+# setuptools files
+*.egg-info/
+
+# testing files
+.tox/
+.coverage
+
+# files generated for release
+dist/
+build/
+README.rst
+
+# Editor
+.idea
+.vscode
+
+# PyEnv
+.python-version
+
+# OS Dependent files
+.DS_Store
+.pypirc
