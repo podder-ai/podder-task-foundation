@@ -38,28 +38,18 @@ class LogSetting:
             task_name = self._get_config('app.name', '')
 
         settings = {
-            'task_name':
-            task_name,
-            'default_log_format':
-            self.DEFAULT_FORMAT,
-            'date_format':
-            self.DATE_FORMAT,
-            'task_log_format':
-            self._get_config('task_log_format', self.DEFAULT_FORMAT),
-            'server_log_format':
-            self._get_config('server_log_format', self.DEFAULT_FORMAT),
-            'color_task_log_format':
-            self._get_config('color_task_log_format', self.DEFAULT_FORMAT),
-            'color_server_log_format':
-            self._get_config('color_server_log_format', self.DEFAULT_FORMAT),
-            'task_log_level':
-            self._get_config('task_log_level', logging.DEBUG),
-            'server_log_level':
-            self._get_config('server_log_level', logging.DEBUG),
-            'log_colors':
-            self._get_config('log_colors', {}),
-            'secondary_log_colors':
-            self._get_config('secondary_log_colors', {}),
+            'task_name': task_name,
+            'default_log_format': self.DEFAULT_FORMAT,
+            'date_format': self.DATE_FORMAT,
+            'task_log_format': self._get_config('task_log_format', self.DEFAULT_FORMAT),
+            'server_log_format': self._get_config('server_log_format', self.DEFAULT_FORMAT),
+            'color_task_log_format': self._get_config('color_task_log_format', self.DEFAULT_FORMAT),
+            'color_server_log_format': self._get_config('color_server_log_format',
+                                                        self.DEFAULT_FORMAT),
+            'task_log_level': self._get_config('task_log_level', logging.DEBUG),
+            'server_log_level': self._get_config('server_log_level', logging.DEBUG),
+            'log_colors': self._get_config('log_colors', {}),
+            'secondary_log_colors': self._get_config('secondary_log_colors', {}),
         }
 
         return settings

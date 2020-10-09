@@ -2,8 +2,7 @@ import json
 from collections import OrderedDict
 from pathlib import Path
 
-from podder_task_foundation.config.parsers.base_config_parser import \
-    BaseConfigParser
+from podder_task_foundation.config.parsers.base_config_parser import BaseConfigParser
 
 
 class JsonConfigParser(BaseConfigParser):

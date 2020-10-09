@@ -27,10 +27,8 @@ class Process(object):
         elements = full_name.split(".")
         if len(elements) < 2:
             raise ProcessError(
-                message="Your Process class is placed on different place {}.".
-                format(full_name),
-                detail=
-                "It should placed on ./processes/[your task name]/process.py",
+                message="Your Process class is placed on different place {}.".format(full_name),
+                detail="It should placed on ./processes/[your task name]/process.py",
                 how_to_solve="Move your Process class to the right place",
             )
 
@@ -51,9 +49,7 @@ class Process(object):
         except ProcessError as exception:
             self.context.logger.critical(exception.message)
             self.context.logger.critical("".join(
-                traceback.format_exception(etype=Exception,
-                                           value=exception,
-                                           tb=None)))
+                traceback.format_exception(etype=Exception, value=exception, tb=None)))
         except SystemExit:
             self.context.logger.critical("system exit")
         except KeyboardInterrupt as exception:
@@ -65,6 +61,5 @@ class Process(object):
 
         return output
 
-    def execute(self, input_payload: Payload, output_payload: Payload,
-                context: Context):
+    def execute(self, input_payload: Payload, output_payload: Payload, context: Context):
         pass

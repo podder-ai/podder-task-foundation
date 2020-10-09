@@ -54,17 +54,14 @@ class Payload(object):
 
         return None
 
-    def get_data(self,
-                 name: Optional[str] = None) -> Optional[Union[Dict, List]]:
+    def get_data(self, name: Optional[str] = None) -> Optional[Union[Dict, List]]:
         data = None
         if name is not None:
-            if self._data[name].type == "dictionary" or self._data[
-                    name].type == "array":
+            if self._data[name].type == "dictionary" or self._data[name].type == "array":
                 data = self._data[name]
         else:
             for key in self._data.values():
-                if self._data[name].type == "dictionary" or self._data[
-                        name].type == "array":
+                if self._data[name].type == "dictionary" or self._data[name].type == "array":
                     data = self._data[key]
 
         if data is not None:

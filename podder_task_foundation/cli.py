@@ -14,12 +14,10 @@ class CLI(object):
 
     @staticmethod
     def _get_parser() -> argparse.ArgumentParser:
-        parser = argparse.ArgumentParser(
-            description='Podder Task CLI Argument Parser')
-        parser.add_argument(
-            'process_name',
-            type=str,
-            help='specify process name which you want to execute')
+        parser = argparse.ArgumentParser(description='Podder Task CLI Argument Parser')
+        parser.add_argument('process_name',
+                            type=str,
+                            help='specify process name which you want to execute')
         parser.add_argument('-i',
                             '--input',
                             nargs='+',
@@ -30,13 +28,12 @@ class CLI(object):
                             nargs='+',
                             type=str,
                             help='Input files (you can pass file[s])')
-        parser.add_argument(
-            '-c',
-            '--config',
-            nargs='?',
-            default="",
-            type=str,
-            help='Input files (you can pass file[s] or directory)')
+        parser.add_argument('-c',
+                            '--config',
+                            nargs='?',
+                            default="",
+                            type=str,
+                            help='Input files (you can pass file[s] or directory)')
         return parser
 
     def execute(self):
@@ -47,11 +44,8 @@ class CLI(object):
         else:
             config_path = Path(arguments.config)
 
-        context = Context(mode=MODE.CONSOLE,
-                          process_name=process_name,
-                          config_path=config_path)
-        process_module = importlib.import_module(
-            'processes.{}.process'.format(process_name))
+        context = Context(mode=MODE.CONSOLE, process_name=process_name, config_path=config_path)
+        process_module = importlib.import_module('processes.{}.process'.format(process_name))
         process = process_module.Process(mode=MODE.CONSOLE, context=context)
         _input = Payload()
         files = arguments.input

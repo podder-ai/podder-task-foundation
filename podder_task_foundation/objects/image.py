@@ -1,21 +1,16 @@
 from pathlib import Path
 from typing import Optional
 
-from PIL import Image as PILImage
-from PIL import ImageOps
+from PIL import Image as PILImage, ImageOps
 
 from .object import Object
 
 
 class Image(Object):
-    supported_extensions = [
-        ".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".tif", ".tiff"
-    ]
+    supported_extensions = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".tif", ".tiff"]
     type = "image"
 
-    def __init__(self,
-                 data: Optional[object] = None,
-                 path: Optional[Path] = None):
+    def __init__(self, data: Optional[object] = None, path: Optional[Path] = None):
         raw_data = None
         if data is not None:
             raw_data = ImageOps.exif_transpose(data)
@@ -31,12 +26,12 @@ class Image(Object):
         return self.to_str()
 
     def to_repr(self) -> str:
-        return "<Type: {} Format:{} Size:{} Mode:{}>".format(
-            self.type, self._data.format, self._data.size, self._data.mode)
+        return "<Type: {} Format:{} Size:{} Mode:{}>".format(self.type, self._data.format,
+                                                             self._data.size, self._data.mode)
 
     def to_str(self) -> str:
-        return "<Type: {} Format:{} Size:{} Mode:{}>".format(
-            self.type, self._data.format, self._data.size, self._data.mode)
+        return "<Type: {} Format:{} Size:{} Mode:{}>".format(self.type, self._data.format,
+                                                             self._data.size, self._data.mode)
 
     def save(self, path: Path):
         if path.suffix == ".jpg" or path.suffix == ".jpeg":

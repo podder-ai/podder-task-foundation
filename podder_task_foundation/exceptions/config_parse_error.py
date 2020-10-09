@@ -7,8 +7,7 @@ class ConfigParseError(ProcessError):
     default_how_to_solve = ''
     default_reference_url = ''
 
-    def __init__(self, path: Path, parser_type: str, detail, how_to_solve: str,
-                 reference_url: str):
+    def __init__(self, path: Path, parser_type: str, detail, how_to_solve: str, reference_url: str):
         message = "Parse config file " + str(
             path.resolve()) + ' failed with parser type ' + parser_type
         self.message = message

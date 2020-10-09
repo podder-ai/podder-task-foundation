@@ -3,8 +3,7 @@ from pathlib import Path
 
 import yaml
 
-from podder_task_foundation.config.parsers.base_config_parser import \
-    BaseConfigParser
+from podder_task_foundation.config.parsers.base_config_parser import BaseConfigParser
 
 
 def represent_odict(dumper, instance):
