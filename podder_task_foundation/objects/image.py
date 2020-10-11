@@ -11,11 +11,14 @@ class Image(LazyLoadFile):
     supported_extensions = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".tif", ".tiff"]
     type = "image"
 
-    def __init__(self, data: Optional[object] = None, path: Optional[Path] = None):
+    def __init__(self,
+                 data: Optional[object] = None,
+                 path: Optional[Path] = None,
+                 name: Optional[str] = None):
         raw_data = None
         if data is not None:
             raw_data = ImageOps.exif_transpose(data)
-        super().__init__(raw_data, path)
+        super().__init__(raw_data, path, name)
 
     def __repr__(self):
         return self.to_repr()
@@ -40,7 +43,3 @@ class Image(LazyLoadFile):
             self._data.save(str(path), quality=90)
         else:
             self._data.save(str(path))
-
-    @classmethod
-    def load(cls, path: Path):
-        return Image(path=path)

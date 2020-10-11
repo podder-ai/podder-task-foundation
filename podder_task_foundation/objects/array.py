@@ -13,8 +13,8 @@ class Array(Object):
     supported_extensions = [".json", ".yaml", ".csv"]
     type = "array"
 
-    def __init__(self, data: Optional[List] = None):
-        super().__init__(data)
+    def __init__(self, data: Optional[List] = None, name: Optional[str] = None):
+        super().__init__(data, name)
 
     def __repr__(self):
         return self.to_json()
@@ -42,9 +42,9 @@ class Array(Object):
             return True
 
     @classmethod
-    def load(cls, path: Path):
+    def load(cls, path: Path, name: Optional[str] = None):
         data = DataFileLoader().load(path)
-        return cls(data)
+        return cls(data, name=cls._get_name(path, name))
 
     @classmethod
     def is_supported_file(cls, path: Path) -> bool:

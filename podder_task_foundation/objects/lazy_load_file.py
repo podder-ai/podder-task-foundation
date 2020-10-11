@@ -8,8 +8,8 @@ class LazyLoadFile(Object):
     supported_extensions = []
     type = "lazy_load_file"
 
-    def __init__(self, data: Any = None, path: Optional[Path] = None):
-        super().__init__(data)
+    def __init__(self, data: Any = None, path: Optional[Path] = None, name: Optional[str] = None):
+        super().__init__(data, name)
         self._path = path
 
     def __repr__(self):
@@ -34,8 +34,8 @@ class LazyLoadFile(Object):
         return self._data
 
     @classmethod
-    def load(cls, path: Path):
-        return cls(path)
+    def load(cls, path: Path, name: Optional[str] = None):
+        return cls(path=path, name=cls._get_name(path, name))
 
     @classmethod
     def is_supported_file(cls, path: Path) -> bool:

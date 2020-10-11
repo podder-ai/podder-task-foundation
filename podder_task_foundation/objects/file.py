@@ -8,8 +8,8 @@ class File(Object):
     supported_extensions = []
     type = "file"
 
-    def __init__(self, data: Optional[Path] = None):
-        super().__init__(data)
+    def __init__(self, data: Optional[Path] = None, name: Optional[str] = None):
+        super().__init__(data, name)
 
     def __repr__(self):
         return str(self._data)
@@ -21,8 +21,8 @@ class File(Object):
         pass
 
     @classmethod
-    def load(cls, path: Path):
-        return cls(path)
+    def load(cls, path: Path, name: Optional[str] = None):
+        return cls(data=path, name=cls._get_name(path, name))
 
     @classmethod
     def is_supported_file(cls, path: Path) -> bool:

@@ -1,23 +1,23 @@
-from collections import OrderedDict
+import copy
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Dict, Generator, List, Optional, Union
 
 from .objects import Array, Dictionary, Image, Object, factory
 
 
 class Payload(object):
     def __init__(self):
-        self._data = OrderedDict()
+        self._data = []
 
     def __getitem__(self, name):
-        return self._data[name]
+        return self.get(name=name)
 
     def _filter(self,
                 name: Optional[str] = None,
                 object_types: Optional[List[str]] = None) -> [Object]:
         result = []
-        for key, _object in self._data.items():
-            if name is not None and key != name:
+        for _object in self._data:
+            if name is not None and _object.name != name:
                 continue
             if object_types is not None and _object.type not in object_types:
                 continue
@@ -28,8 +28,8 @@ class Payload(object):
     def _first(self,
                name: Optional[str] = None,
                object_types: Optional[List[str]] = None) -> Optional[Object]:
-        for key, _object in self._data.items():
-            if name is not None and key != name:
+        for _object in self._data:
+            if name is not None and _object.name != name:
                 continue
             if object_types is not None and _object.type not in object_types:
                 continue
@@ -37,37 +37,53 @@ class Payload(object):
 
         return None
 
+    def add_directory(self, directory: Path) -> bool:
+        if not directory.is_dir():
+            return False
+        files = sorted(list(directory.glob("*")), key=lambda x: x.name)
+
+        for file in files:
+            if file.is_dir() or file.name[0] == ".":
+                continue
+            name_elements = file.name.split("_")
+            self.add_file(file, name=name_elements[0])
+
+        return True
+
     def add_file(self, file: Path, name: Optional[str] = None) -> bool:
         if file.is_dir():
             return False
         _object = factory(file)
         if _object is None:
             return False
-
         self.add(_object, name)
+
         return True
 
     def add(self, _object: Object, name: Optional[str] = None):
-        self._data[name] = _object
+        if name is not None:
+            _object.rename(name)
+
+        self._data.append(_object)
 
     def add_dictionary(self, dictionary: dict, name: Optional[str] = None):
-        data = Dictionary(data=dictionary)
-        self.add(data, name=name)
+        data = Dictionary(data=dictionary, name=name)
+        self.add(data)
 
     def add_array(self, array: list, name: Optional[str] = None):
-        data = Array(data=array)
-        self.add(data, name=name)
+        data = Array(data=array, name=name)
+        self.add(data)
 
     def add_image(self, image: object, name: Optional[str] = None):
-        data = Image(data=image)
-        self.add(data, name=name)
+        data = Image(data=image, name=name)
+        self.add(data)
 
-    def get_all(self,
-                name: Optional[str] = None,
-                object_type: Union[None, str, List[str]] = None) -> [Object]:
+    def all(self,
+            name: Optional[str] = None,
+            object_type: Union[None, str, List[str]] = None) -> [Object]:
         if name is None and object_type is None:
-            return list(self._data.values())
-        if isinstance(object_type, str):
+            return self._data
+        if object_type is not None and isinstance(object_type, str):
             object_type = [object_type]
         return self._filter(name=name, object_types=object_type)
 
@@ -91,3 +107,8 @@ class Payload(object):
             return data.data
 
         return None
+
+    def all_images(self, name: Optional[str] = None) -> Generator[object, None, None]:
+        images = self.all(name, object_type="image")
+        for image in images:
+            yield image.data
