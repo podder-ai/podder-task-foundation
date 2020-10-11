@@ -3,10 +3,11 @@ from typing import Optional
 
 from PIL import Image as PILImage, ImageOps
 
+from .lazy_load_file import LazyLoadFile
 from .object import Object
 
 
-class Image(Object):
+class Image(LazyLoadFile):
     supported_extensions = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".tif", ".tiff"]
     type = "image"
 
@@ -14,10 +15,7 @@ class Image(Object):
         raw_data = None
         if data is not None:
             raw_data = ImageOps.exif_transpose(data)
-        elif path is not None:
-            raw_data = PILImage.open(str(path))
-            raw_data = ImageOps.exif_transpose(raw_data)
-        super().__init__(raw_data)
+        super().__init__(raw_data, path)
 
     def __repr__(self):
         return self.to_repr()
@@ -32,6 +30,10 @@ class Image(Object):
     def to_str(self) -> str:
         return "<Type: {} Format:{} Size:{} Mode:{}>".format(self.type, self._data.format,
                                                              self._data.size, self._data.mode)
+
+    def _lazy_load(self):
+        raw_data = PILImage.open(str(self._path))
+        self._data = ImageOps.exif_transpose(raw_data)
 
     def save(self, path: Path):
         if path.suffix == ".jpg" or path.suffix == ".jpeg":

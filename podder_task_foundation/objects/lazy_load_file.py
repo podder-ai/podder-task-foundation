@@ -1,0 +1,45 @@
+from pathlib import Path
+from typing import Any, Optional
+
+from .object import Object
+
+
+class LazyLoadFile(Object):
+    supported_extensions = []
+    type = "lazy_load_file"
+
+    def __init__(self, data: Any = None, path: Optional[Path] = None):
+        super().__init__(data)
+        self._path = path
+
+    def __repr__(self):
+        return str(self._data)
+
+    def __str__(self):
+        return str(self._data)
+
+    def _lazy_load(self):
+        pass
+
+    def clear(self):
+        self._data = ""
+
+    def save(self, path: Path) -> bool:
+        pass
+
+    @property
+    def data(self):
+        if self._data is None:
+            self._lazy_load()
+        return self._data
+
+    @classmethod
+    def load(cls, path: Path):
+        return cls(path)
+
+    @classmethod
+    def is_supported_file(cls, path: Path) -> bool:
+        if path.suffix not in cls.supported_extensions:
+            return False
+
+        return True
