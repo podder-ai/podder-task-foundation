@@ -51,7 +51,10 @@ class CLI(object):
         files = arguments.input
         for file in files:
             path = Path(file).expanduser()
-            _input.add_file(file=path)
+            if path.is_dir():
+                _input.add_directory(directory=path)
+            else:
+                _input.add_file(file=path)
 
         output = process.handle(_input)
 
