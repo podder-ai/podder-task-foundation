@@ -56,11 +56,11 @@ class CLI(object):
             else:
                 _input.add_file(file=path)
 
-        output = process.handle(_input)
+        output: Payload = process.handle(_input)
 
         output_files = arguments.output
         if len(output_files) > 0:
-            data = output.get_all_data()
+            data = output.all()
             output_path = Path(output_files[0]).expanduser()
             if len(data) > 0:
                 data[0].save(output_path)
