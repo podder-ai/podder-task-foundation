@@ -1,9 +1,6 @@
 from podder_task_foundation import __version__ as version
 from setuptools import find_packages, setup
 
-with open('requirements.txt') as file:
-    install_requires = file.read()
-
 setup(
     name='podder-task-foundation',
     version=version,
