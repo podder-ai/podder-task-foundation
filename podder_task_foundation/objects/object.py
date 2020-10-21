@@ -51,7 +51,7 @@ class Object(object):
     def rename(self, name: str):
         self._name = name
 
-    def get_file_name(self, base_path=Optional[Path]):
+    def get_file_name(self, base_path: Optional[Path] = None):
         path = Path(self._name)
         if path.suffix == "":
             path = path.parent.joinpath(self.name + self.default_extension)
