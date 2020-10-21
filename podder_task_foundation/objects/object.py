@@ -3,6 +3,8 @@ import pickle
 from pathlib import Path
 from typing import Any, Optional
 
+from ..utilities import Strings
+
 
 class Object(object):
     supported_extensions = [".pkl"]
@@ -11,6 +13,8 @@ class Object(object):
 
     def __init__(self, data: Any = None, name: Optional[str] = None):
         self._data = copy.deepcopy(data)
+        if name is None or name == "":
+            name = Strings().random_string(16)
         self._name = name
 
     def __repr__(self):
