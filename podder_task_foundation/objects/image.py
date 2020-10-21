@@ -10,6 +10,7 @@ from .object import Object
 class Image(LazyLoadFile):
     supported_extensions = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".tif", ".tiff"]
     type = "image"
+    default_extension = ".png"
 
     def __init__(self,
                  data: Optional[object] = None,

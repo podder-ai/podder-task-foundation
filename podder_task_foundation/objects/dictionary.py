@@ -13,6 +13,7 @@ class Dictionary(Object):
     _properties = OrderedDict({})
     supported_extensions = [".json", ".yaml", ".yml"]
     type = "dictionary"
+    default_extension = ".json"
 
     def __init__(self, data: Optional[Dict] = None, name: Optional[str] = None):
         super().__init__(data, name)

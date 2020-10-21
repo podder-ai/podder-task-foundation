@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 from typing import Optional
 
@@ -17,8 +18,8 @@ class File(Object):
     def __str__(self):
         return str(self._data)
 
-    def save(self, path: Path) -> bool:
-        pass
+    def save(self, path: Path):
+        shutil.copy(self._data, path)
 
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None):

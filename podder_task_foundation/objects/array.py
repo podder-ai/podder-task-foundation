@@ -12,6 +12,7 @@ from .object import Object
 class Array(Object):
     supported_extensions = [".json", ".yaml", ".csv"]
     type = "array"
+    default_extension = ".json"
 
     def __init__(self, data: Optional[List] = None, name: Optional[str] = None):
         super().__init__(data, name)

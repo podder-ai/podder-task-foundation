@@ -7,6 +7,7 @@ from typing import Any, Optional
 class Object(object):
     supported_extensions = [".pkl"]
     type = "object"
+    default_extension = ".pkl"
 
     def __init__(self, data: Any = None, name: Optional[str] = None):
         self._data = copy.deepcopy(data)
@@ -45,6 +46,17 @@ class Object(object):
 
     def rename(self, name: str):
         self._name = name
+
+    def get_file_name(self, base_path=Optional[Path]):
+        path = Path(self._name)
+        if path.suffix == "":
+            path = path.parent.joinpath(self.name + self.default_extension)
+        if path.suffix not in self.supported_extensions:
+            path = path.parent.joinpath(path.name + self.default_extension)
+        if base_path is not None:
+            path = base_path.joinpath(path.name)
+
+        return path
 
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None):
