@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Optional
 
 from .config import Config
@@ -22,7 +23,10 @@ class Context(object):
     def logger(self) -> BaseLogger:
         return self._logger
 
-    def __init__(self, mode: str, process_name: str, config_path: Optional[str] = None) -> None:
+    def __init__(self,
+                 mode: str,
+                 process_name: Optional[str] = None,
+                 config_path: Optional[Path] = None) -> None:
         self._mode = mode
         self._process_name = process_name
         self._config = Config(self._mode, config_path)

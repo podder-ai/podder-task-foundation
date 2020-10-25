@@ -1,4 +1,5 @@
 from .config_parse_error import ConfigParseError
+from .data_format_error import DataFormatError
 from .directory_not_found_error import DirectoryNotFoundError
 from .process_error import ProcessError
 from .target_file_not_found_error import TargetFileNotFoundError
@@ -12,4 +13,5 @@ __all__ = [
     'UnsupportedFileFormatError',
     'DirectoryNotFoundError',
     'TargetFileNotFoundError',
+    'DataFormatError',
 ]

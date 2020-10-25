@@ -7,6 +7,7 @@ from .config import Config
 from .context import Context
 from .mode import MODE
 from .payload import Payload
+from .pipeline import Pipeline
 
 
 class CLI(object):
@@ -17,6 +18,7 @@ class CLI(object):
     def _get_parser() -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser(description='Podder Task CLI Argument Parser')
         parser.add_argument('process_name',
+                            nargs='?',
                             type=str,
                             help='specify process name which you want to execute')
         parser.add_argument('-i',
@@ -45,15 +47,6 @@ class CLI(object):
         if not ok:
             return
 
-        process_name = arguments.process_name
-        if arguments.config == "":
-            config_path = Path(Config.default_path).joinpath(process_name)
-        else:
-            config_path = Path(arguments.config)
-
-        context = Context(mode=MODE.CONSOLE, process_name=process_name, config_path=config_path)
-        process_module = importlib.import_module('processes.{}.process'.format(process_name))
-        process = process_module.Process(mode=MODE.CONSOLE, context=context)
         _input = Payload()
         files = arguments.input
         for file in files:
@@ -63,7 +56,25 @@ class CLI(object):
             else:
                 _input.add_file(file=path)
 
-        output: Payload = process.handle(_input)
+        if arguments.config == "":
+            config_path = Path(Config.default_path)
+        else:
+            config_path = Path(arguments.config)
+
+        _input = Payload()
+        files = arguments.input
+        for file in files:
+            path = Path(file).expanduser()
+            if path.is_dir():
+                _input.add_directory(directory=path)
+            else:
+                _input.add_file(file=path)
+
+        process_name = arguments.process_name
+        if process_name is not None:
+            output = self._execute_single_process(process_name, _input, config_path=config_path)
+        else:
+            output = self._execute_pipeline(_input, config_path=config_path)
 
         data = output.all()
         if should_output_to_directory:
@@ -98,3 +109,18 @@ class CLI(object):
             return True, True, output_path
 
         return True, False, output_path
+
+    @staticmethod
+    def _execute_single_process(name: str, _input: Payload, config_path: Path) -> Payload:
+        process_config_path = config_path.joinpath(name)
+        context = Context(mode=MODE.CONSOLE, process_name=name, config_path=process_config_path)
+        process_module = importlib.import_module('processes.{}.process'.format(name))
+        process = process_module.Process(mode=MODE.CONSOLE, context=context)
+
+        output: Payload = process.handle(_input)
+        return output
+
+    def _execute_pipeline(self, _input: Payload, config_path: Path) -> Payload:
+        context = Context(mode=MODE.CONSOLE, config_path=config_path)
+        blueprint = context.config.get("pipeline", default=None)
+        Pipeline(blueprint=blueprint, context=context, mode=MODE.CONSOLE)

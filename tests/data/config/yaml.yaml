@@ -1,0 +1,7 @@
+key: value
+dict:
+  key: value
+array:
+  - value1
+  - value2
+  - value3

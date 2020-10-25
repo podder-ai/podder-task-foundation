@@ -112,3 +112,12 @@ class Payload(object):
         images = self.all(name, object_type="image")
         for image in images:
             yield image.data
+
+    def copy(self) -> object:
+        return copy.deepcopy(self)
+
+    def merge(self, target):
+        for _object in target.all():
+            self.add(_object)
+
+        return
