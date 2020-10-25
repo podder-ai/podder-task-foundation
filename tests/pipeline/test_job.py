@@ -9,3 +9,11 @@ def test_job_create():
                       config_path=Path(__file__).parent.parent.joinpath("data", "config"))
     job = Job(process=Process(mode=MODE.TEST, context=context))
     assert job
+
+
+def test_job_execute():
+    context = Context(mode=MODE.TEST,
+                      config_path=Path(__file__).parent.parent.joinpath("data", "config"))
+    job = Job(process=Process(mode=MODE.TEST, context=context))
+    output = job.execute(Payload())
+    assert output
