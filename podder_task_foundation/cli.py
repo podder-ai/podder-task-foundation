@@ -49,26 +49,18 @@ class CLI(object):
 
         _input = Payload()
         files = arguments.input
-        for file in files:
-            path = Path(file).expanduser()
-            if path.is_dir():
-                _input.add_directory(directory=path)
-            else:
-                _input.add_file(file=path)
+        if files is not None:
+            for file in files:
+                path = Path(file).expanduser()
+                if path.is_dir():
+                    _input.add_directory(directory=path)
+                else:
+                    _input.add_file(file=path)
 
         if arguments.config == "":
             config_path = Path(Config.default_path)
         else:
             config_path = Path(arguments.config)
-
-        _input = Payload()
-        files = arguments.input
-        for file in files:
-            path = Path(file).expanduser()
-            if path.is_dir():
-                _input.add_directory(directory=path)
-            else:
-                _input.add_file(file=path)
 
         process_name = arguments.process_name
         if process_name is not None:
@@ -120,7 +112,11 @@ class CLI(object):
         output: Payload = process.handle(_input)
         return output
 
-    def _execute_pipeline(self, _input: Payload, config_path: Path) -> Payload:
+    @staticmethod
+    def _execute_pipeline(_input: Payload, config_path: Path) -> Payload:
         context = Context(mode=MODE.CONSOLE, config_path=config_path)
         blueprint = context.config.get("pipeline", default=None)
-        Pipeline(blueprint=blueprint, context=context, mode=MODE.CONSOLE)
+        pipeline = Pipeline(blueprint=blueprint, context=context, mode=MODE.CONSOLE)
+
+        return pipeline.execute(_input)
+
