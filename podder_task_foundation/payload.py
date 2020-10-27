@@ -46,8 +46,7 @@ class Payload(object):
         for file in files:
             if file.is_dir() or file.name[0] == ".":
                 continue
-            name_elements = file.name.split("_")
-            self.add_file(file, name=name_elements[0])
+            self.add_file(file, name=file.name)
 
         return True
 
