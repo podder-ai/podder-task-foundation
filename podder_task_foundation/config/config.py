@@ -10,7 +10,7 @@ from .config_file import ConfigFile
 
 class Config(object):
     _data = {}
-    default_path = os.getenv("CONFIG_ROOT_PATH", "./config/")
+    default_path = Path(os.getenv("CONFIG_ROOT_PATH", "./config/"))
 
     def __getitem__(self, key):
         return self._data[key]
@@ -21,11 +21,11 @@ class Config(object):
     def __repr__(self):
         return str(self._data)
 
-    def __init__(self, mode: str, path: str = None):
+    def __init__(self, mode: str, path: Optional[Path] = None):
         self._mode = mode
         self._load_dotenv()
-        path = Path(path or self.default_path)
-        self._load_config(path)
+        self._path = path or self.default_path
+        self._load_config(self._path)
 
     @staticmethod
     def _load_dotenv():
@@ -72,3 +72,7 @@ class Config(object):
     @staticmethod
     def env(key: str, default: Any = None) -> Optional[str]:
         return os.getenv(key, default)
+
+    @property
+    def path(self) -> Path:
+        return self._path
