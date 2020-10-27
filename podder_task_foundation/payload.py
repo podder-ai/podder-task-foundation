@@ -2,6 +2,7 @@ import copy
 from pathlib import Path
 from typing import Dict, Generator, List, Optional, Union
 
+from .exceptions import WrongDataFormatError
 from .objects import Array, Dictionary, Image, Object, factory
 
 
@@ -67,10 +68,20 @@ class Payload(object):
         self._data.append(_object)
 
     def add_dictionary(self, dictionary: dict, name: Optional[str] = None):
+        if not isinstance(dictionary, dict):
+            raise WrongDataFormatError(
+                detail="Format is not dict for name {}. Got {}".format(
+                    name or "Noname", type(dictionary)),
+                how_to_solve="Change format to dict or use appropriate method to add data")
         data = Dictionary(data=dictionary, name=name)
         self.add(data)
 
     def add_array(self, array: list, name: Optional[str] = None):
+        if not isinstance(array, list):
+            raise WrongDataFormatError(
+                detail="Format is not list for name {}. Got {}".format(
+                    name or "Noname", type(array)),
+                how_to_solve="Change format to dict or use appropriate method to add data")
         data = Array(data=array, name=name)
         self.add(data)
 

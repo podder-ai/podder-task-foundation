@@ -37,8 +37,8 @@ class Object(object):
     def _get_name(cls, path: Path, name: Optional[str] = None) -> str:
         if name is not None:
             return name
-        name_elements = path.name.split("_")
-        return name_elements[0]
+
+        return path.name
 
     @property
     def data(self):

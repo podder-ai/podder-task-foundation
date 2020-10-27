@@ -18,6 +18,7 @@ class Pipeline(object):
         self._context = context
         self._mode = mode
         self._process_cache = {}
+        self.load()
 
     def load(self):
         self._pipeline = self._build_pipeline(self._blueprint)
@@ -54,7 +55,7 @@ class Pipeline(object):
                 pipe = self._build_pipeline(blueprint=name)
                 units.append(pipe)
 
-            return Pipe(units=units, execute_type=_type)
+        return Pipe(units=units, execute_type=_type)
 
     def _get_process(self, name: str) -> Process:
         if name in self._process_cache:

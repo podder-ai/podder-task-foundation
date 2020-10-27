@@ -78,11 +78,11 @@ class CLI(object):
             if len(data) == 1:
                 data[0].save(output_path)
             elif len(data) > 1:
-                Exception(
+                raise Exception(
                     "You should set directory name to the output because there are multiple outputs"
                 )
             else:
-                Exception("No output for {}".format(output_path))
+                raise Exception("No output for {}".format(output_path))
 
     @staticmethod
     def check_output_type(output_names: [str]) -> (bool, bool, Optional[Path]):
@@ -94,8 +94,7 @@ class CLI(object):
             if output_path.is_dir():
                 return True, True, output_path
             else:
-                Exception("Output file {} already exists.".format(output_path))
-                return False, False, None
+                raise Exception("Output file {} already exists.".format(output_path))
 
         if output_path.suffix == "":
             return True, True, output_path
@@ -119,4 +118,3 @@ class CLI(object):
         pipeline = Pipeline(blueprint=blueprint, context=context, mode=MODE.CONSOLE)
 
         return pipeline.execute(_input)
-
