@@ -1,7 +1,7 @@
 import json
 from collections import OrderedDict
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Any, Optional, Union
 
 from podder_task_foundation.utilities import DataFileLoader
 
@@ -14,9 +14,6 @@ class Dictionary(Object):
     supported_extensions = [".json", ".yaml", ".yml"]
     type = "dictionary"
     default_extension = ".json"
-
-    def __init__(self, data: Optional[Dict] = None, name: Optional[str] = None):
-        super().__init__(data, name)
 
     def __repr__(self):
         return self.to_json()
@@ -45,7 +42,7 @@ class Dictionary(Object):
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None):
         data = DataFileLoader().load(path)
-        return cls(data, name=cls._get_name(path, name))
+        return cls(data, path=path, name=cls._get_name(path, name))
 
     @classmethod
     def is_supported_file(cls, path: Path) -> bool:

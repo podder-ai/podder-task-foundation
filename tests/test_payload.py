@@ -63,4 +63,5 @@ def test_payload_load_directory():
     objects = payload.all()
     assert len(objects) == 5
     assert objects[0].type == "array"
-    assert objects[0].name == "array"
+    assert objects[0].name == "array_01.json"
+    assert objects[0].extension == ".json"

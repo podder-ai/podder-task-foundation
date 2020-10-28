@@ -15,12 +15,15 @@ class Payload(object):
 
     def _filter(self,
                 name: Optional[str] = None,
-                object_types: Optional[List[str]] = None) -> [Object]:
+                object_types: Optional[List[str]] = None,
+                extensions: Optional[List[str]] = None) -> [Object]:
         result = []
         for _object in self._data:
             if name is not None and _object.name != name:
                 continue
             if object_types is not None and _object.type not in object_types:
+                continue
+            if extensions is not None and _object.path is not None and _object.path.suffix not in extensions:
                 continue
             result.append(_object)
 
@@ -28,11 +31,14 @@ class Payload(object):
 
     def _first(self,
                name: Optional[str] = None,
-               object_types: Optional[List[str]] = None) -> Optional[Object]:
+               object_types: Optional[List[str]] = None,
+               extensions: Optional[List[str]] = None) -> Optional[Object]:
         for _object in self._data:
             if name is not None and _object.name != name:
                 continue
             if object_types is not None and _object.type not in object_types:
+                continue
+            if extensions is not None and _object.path is not None and _object.path.suffix not in extensions:
                 continue
             return _object
 
@@ -90,19 +96,25 @@ class Payload(object):
 
     def all(self,
             name: Optional[str] = None,
-            object_type: Union[None, str, List[str]] = None) -> [Object]:
+            object_type: Union[None, str, List[str]] = None,
+            extension: Union[None, str, List[str]] = None) -> [Object]:
         if name is None and object_type is None:
             return self._data
         if object_type is not None and isinstance(object_type, str):
             object_type = [object_type]
-        return self._filter(name=name, object_types=object_type)
+        if isinstance(extension, str):
+            extension = [extension]
+        return self._filter(name=name, object_types=object_type, extensions=extension)
 
     def get(self,
             name: Optional[str] = None,
-            object_type: Union[None, str, List[str]] = None) -> Object:
+            object_type: Union[None, str, List[str]] = None,
+            extension: Union[None, str, List[str]] = None) -> Object:
         if isinstance(object_type, str):
             object_type = [object_type]
-        return self._first(name=name, object_types=object_type)
+        if isinstance(extension, str):
+            extension = [extension]
+        return self._first(name=name, object_types=object_type, extensions=extension)
 
     def get_image(self, name: Optional[str] = None) -> Optional[object]:
         image = self.get(name=name, object_type="image")

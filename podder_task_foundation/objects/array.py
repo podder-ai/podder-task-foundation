@@ -14,9 +14,6 @@ class Array(Object):
     type = "array"
     default_extension = ".json"
 
-    def __init__(self, data: Optional[List] = None, name: Optional[str] = None):
-        super().__init__(data, name)
-
     def __repr__(self):
         return self.to_json()
 
@@ -45,7 +42,7 @@ class Array(Object):
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None):
         data = DataFileLoader().load(path)
-        return cls(data, name=cls._get_name(path, name))
+        return cls(data, path=path, name=cls._get_name(path, name))
 
     @classmethod
     def is_supported_file(cls, path: Path) -> bool:

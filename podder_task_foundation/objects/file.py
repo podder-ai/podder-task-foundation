@@ -10,7 +10,7 @@ class File(Object):
     type = "file"
 
     def __init__(self, data: Optional[Path] = None, name: Optional[str] = None):
-        super().__init__(data, name)
+        super().__init__(data=data, name=name, path=data)
 
     def __repr__(self):
         return str(self._data)

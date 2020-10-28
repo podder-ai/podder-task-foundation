@@ -8,7 +8,7 @@ def test_image_create():
     assert _object.type == "image"
 
     file_name = _object.get_file_name()
-    assert file_name.name == "image.png"
+    assert file_name.name == "image_01.png"
 
 
 def test_dictionary_create_with_no_name():

@@ -1,7 +1,7 @@
 import copy
 import pickle
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from ..utilities import Strings
 
@@ -11,10 +11,24 @@ class Object(object):
     type = "object"
     default_extension = ".pkl"
 
-    def __init__(self, data: Any = None, name: Optional[str] = None):
+    def __init__(self,
+                 data: Any = None,
+                 path: Union[None, Path, str] = None,
+                 name: Optional[str] = None):
         self._data = copy.deepcopy(data)
+
+        if type(path) == str and path != "":
+            self._path = Path(path)
+        elif isinstance(path, Path):
+            self._path = path
+        else:
+            self._path = None
+
         if name is None or name == "":
-            name = Strings().random_string(16)
+            if self._path is not None:
+                name = self._path.name
+            else:
+                name = Strings().random_string(16)
         self._name = name
 
     def __repr__(self):
@@ -29,29 +43,32 @@ class Object(object):
     def to_str(self) -> str:
         return "<Type: {}>".format(self.type)
 
+    @property
+    def data(self) -> Any:
+        return self._data
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def path(self) -> Optional[Path]:
+        return self._path
+
+    @property
+    def extension(self) -> str:
+        if isinstance(self._path, Path):
+            return self._path.suffix
+        return ""
+
     def save(self, path: Path):
         with path.open(mode='wb') as file:
             pickle.dump(self._data, file)
 
-    @classmethod
-    def _get_name(cls, path: Path, name: Optional[str] = None) -> str:
-        if name is not None:
-            return name
-
-        return path.name
-
-    @property
-    def data(self):
-        return self._data
-
-    @property
-    def name(self):
-        return self._name
-
     def rename(self, name: str):
         self._name = name
 
-    def get_file_name(self, base_path: Optional[Path] = None):
+    def get_file_name(self, base_path: Optional[Path] = None) -> Path:
         path = Path(self._name)
         if path.suffix == "":
             path = path.parent.joinpath(self.name + self.default_extension)
@@ -74,3 +91,10 @@ class Object(object):
             return True
 
         return False
+
+    @classmethod
+    def _get_name(cls, path: Path, name: Optional[str] = None) -> str:
+        if name is not None:
+            return name
+
+        return path.name
