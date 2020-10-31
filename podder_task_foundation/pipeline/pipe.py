@@ -1,5 +1,4 @@
 from ..payload import Payload
-from ..process import Process
 from .thread_with_return_value import ThreadWithReturnValue
 from .unit import Unit
 

@@ -1,9 +1,10 @@
 import importlib
-from typing import Optional
+from typing import List, Optional, Union
 
 from ..context import Context
 from ..exceptions import DataFormatError, ProcessError
 from ..payload import Payload
+from ..process import Process
 from .job import Job
 from .pipe import Pipe
 
@@ -53,7 +54,7 @@ class Pipeline(object):
 
         return Pipe(units=units, execute_type=_type)
 
-    def _get_process(self, name: str) -> object:
+    def _get_process(self, name: str) -> Process:
         if name in self._process_cache:
             return self._process_cache[name]
         process_config_path = self._context.config.path.joinpath(name)
@@ -65,3 +66,11 @@ class Pipeline(object):
         self._process_cache[name] = process
 
         return process
+
+    @classmethod
+    def execute_process(cls, process_name: Union[str, List[str]], input_payload: Payload,
+                        context: Context) -> Payload:
+        if type(process_name) == str:
+            process_name = [Union[None, str, List[str]]]
+        pipeline = Pipeline(blueprint={"serial": process_name}, context=context)
+        return pipeline.execute(_input=input_payload)
