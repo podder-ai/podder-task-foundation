@@ -1,14 +1,11 @@
 import importlib
-from pathlib import Path
 from typing import Optional
 
 from ..context import Context
 from ..exceptions import DataFormatError, ProcessError
 from ..payload import Payload
-from ..process import Process
 from .job import Job
 from .pipe import Pipe
-from .unit import Unit
 
 
 class Pipeline(object):
@@ -56,7 +53,7 @@ class Pipeline(object):
 
         return Pipe(units=units, execute_type=_type)
 
-    def _get_process(self, name: str) -> Process:
+    def _get_process(self, name: str) -> object:
         if name in self._process_cache:
             return self._process_cache[name]
         process_config_path = self._context.config.path.joinpath(name)
