@@ -37,7 +37,17 @@ class Dictionary(Object):
         return json.dumps(self._data, cls=NumpyJsonEncoder, ensure_ascii=False)
 
     def save(self, path: Path):
-        path.write_text(self.to_json())
+        file_type = DataFileLoader().get_file_type(path)
+        if file_type is None:
+            return False
+
+        if file_type == "yaml":
+            path.write_text(yaml.dump(self._data))
+            return True
+
+        if file_type == "json":
+            path.write_text(json.dumps(self._data))
+            return True
 
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None):

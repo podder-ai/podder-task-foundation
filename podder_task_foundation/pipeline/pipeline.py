@@ -12,11 +12,10 @@ from .unit import Unit
 
 
 class Pipeline(object):
-    def __init__(self, blueprint: dict, context: Context, mode: str):
+    def __init__(self, blueprint: dict, context: Context):
         self._blueprint: dict = blueprint
         self._pipeline: Optional[Pipe] = None
         self._context = context
-        self._mode = mode
         self._process_cache = {}
         self.load()
 
@@ -61,9 +60,11 @@ class Pipeline(object):
         if name in self._process_cache:
             return self._process_cache[name]
         process_config_path = self._context.config.path.joinpath(name)
-        context = Context(mode=self._mode, process_name=name, config_path=process_config_path)
+        context = Context(mode=self._context.mode,
+                          process_name=name,
+                          config_path=process_config_path)
         process_module = importlib.import_module('processes.{}.process'.format(name))
-        process = process_module.Process(mode=self._mode, context=context)
+        process = process_module.Process(mode=self._context.mode, context=context)
         self._process_cache[name] = process
 
         return process

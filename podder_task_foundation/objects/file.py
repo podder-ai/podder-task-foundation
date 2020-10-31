@@ -2,6 +2,8 @@ import shutil
 from pathlib import Path
 from typing import Optional
 
+import yaml
+
 from .object import Object
 
 

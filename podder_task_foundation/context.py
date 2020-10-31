@@ -1,9 +1,11 @@
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional, Union
 
 from .config import Config
 from .file import File
 from .logging.loggers import BaseLogger, ProcessLogger
+from .payload import Payload
+from .pipeline import Pipeline
 
 
 class Context(object):
@@ -22,6 +24,12 @@ class Context(object):
     @property
     def logger(self) -> BaseLogger:
         return self._logger
+
+    def execute_process(self, process_name: Union[str, List[str]], input_payload: Payload) -> Payload:
+        if type(process_name) == str:
+            process_name = [Union[None, str, List[str]]]
+        pipeline = Pipeline(blueprint={"serial": process_name}, context=self)
+        return pipeline.execute(_input=input_payload)
 
     def __init__(self,
                  mode: str,
