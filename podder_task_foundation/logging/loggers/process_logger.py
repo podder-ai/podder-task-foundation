@@ -10,6 +10,7 @@ from .base_logger import BaseLogger
 class ProcessLogger(BaseLogger):
     def __init__(self, mode: str, config: Config, process_name: str):
         super().__init__(mode, config)
+        self._process_name = process_name
         self._start_task()
 
     def _start_task(self):
@@ -46,6 +47,6 @@ class ProcessLogger(BaseLogger):
     def _create_extra(self) -> Dict:
         extra = {
             'progresstime': str(round((time.time() - self._start_time), 3)),
-            'processname': str(self.setting["task_name"])
+            'processname': str(self._process_name)
         }
         return extra

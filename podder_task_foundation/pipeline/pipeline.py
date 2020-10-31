@@ -57,10 +57,16 @@ class Pipeline(object):
     def _get_process(self, name: str) -> Process:
         if name in self._process_cache:
             return self._process_cache[name]
-        process_config_path = self._context.config.path.joinpath(name)
+        logger = None
+        if self._context.is_process_context:
+            process_config_path = self._context.config.path.parent.joinpath(name)
+            logger = self._context.logger
+        else:
+            process_config_path = self._context.config.path.joinpath(name)
         context = Context(mode=self._context.mode,
                           process_name=name,
-                          config_path=process_config_path)
+                          config_path=process_config_path,
+                          logger=logger)
         process_module = importlib.import_module('processes.{}.process'.format(name))
         process = process_module.Process(mode=self._context.mode, context=context)
         self._process_cache[name] = process
@@ -71,6 +77,6 @@ class Pipeline(object):
     def execute_process(cls, process_name: Union[str, List[str]], input_payload: Payload,
                         context: Context) -> Payload:
         if type(process_name) == str:
-            process_name = [Union[None, str, List[str]]]
+            process_name = [process_name]
         pipeline = Pipeline(blueprint={"serial": process_name}, context=context)
         return pipeline.execute(_input=input_payload)

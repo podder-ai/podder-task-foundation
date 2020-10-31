@@ -52,6 +52,7 @@ class Process(object):
                 traceback.format_exception(etype=Exception, value=exception, tb=None)))
         except SystemExit:
             self.context.logger.critical("system exit")
+            raise Exception
         except KeyboardInterrupt as exception:
             raise exception
 
