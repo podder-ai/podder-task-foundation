@@ -46,7 +46,7 @@ class Dictionary(Object):
             return True
 
         if file_type == "json":
-            path.write_text(json.dumps(self._data))
+            path.write_text(self.to_json())
             return True
 
     @classmethod
