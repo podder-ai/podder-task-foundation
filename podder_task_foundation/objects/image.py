@@ -28,12 +28,12 @@ class Image(LazyLoadFile):
         return self.to_str()
 
     def to_repr(self) -> str:
-        return "<Type: {} Format:{} Size:{} Mode:{}>".format(self.type, self._data.format,
-                                                             self._data.size, self._data.mode)
+        return "<Type: {} Format:{} Size:{} Mode:{}>".format(self.type, self.data.format,
+                                                             self.data.size, self.data.mode)
 
     def to_str(self) -> str:
-        return "<Type: {} Format:{} Size:{} Mode:{}>".format(self.type, self._data.format,
-                                                             self._data.size, self._data.mode)
+        return "<Type: {} Format:{} Size:{} Mode:{}>".format(self.type, self.data.format,
+                                                             self.data.size, self.data.mode)
 
     def _lazy_load(self):
         raw_data = PILImage.open(str(self._path))
@@ -41,6 +41,6 @@ class Image(LazyLoadFile):
 
     def save(self, path: Path):
         if path.suffix == ".jpg" or path.suffix == ".jpeg":
-            self._data.save(str(path), quality=90)
+            self.data.save(str(path), quality=90)
         else:
-            self._data.save(str(path))
+            self.data.save(str(path))
