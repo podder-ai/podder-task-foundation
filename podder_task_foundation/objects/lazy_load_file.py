@@ -13,10 +13,10 @@ class LazyLoadFile(Object):
         self._path = path
 
     def __repr__(self):
-        return str(self._data)
+        return str(self.data)
 
     def __str__(self):
-        return str(self._data)
+        return str(self.data)
 
     def _lazy_load(self):
         pass
