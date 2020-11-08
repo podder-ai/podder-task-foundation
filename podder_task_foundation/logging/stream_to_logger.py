@@ -15,3 +15,6 @@ class StreamToLogger(object):
 
     def flush(self):
         pass
+
+    def close(self):
+        pass
