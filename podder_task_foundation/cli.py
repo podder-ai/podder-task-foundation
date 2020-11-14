@@ -115,6 +115,6 @@ class CLI(object):
     def _execute_pipeline(_input: Payload, config_path: Path) -> Payload:
         context = Context(mode=MODE.CONSOLE, config_path=config_path)
         blueprint = context.config.get("pipeline", default=None)
-        pipeline = Pipeline(blueprint=blueprint, context=context, mode=MODE.CONSOLE)
+        pipeline = Pipeline(blueprint=blueprint, context=context)
 
         return pipeline.execute(_input)

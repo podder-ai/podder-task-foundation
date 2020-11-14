@@ -1,19 +1,20 @@
 import logging
 import os
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from podder_task_foundation.config import Config
 
 
 class LogSetting:
     TASK_NAME_PATH = 'task_name.ini'
-    DEFAULT_FORMAT = '[%(asctime)s.%(msecs)03d] %(levelname)s - %(message)s'
+    DEFAULT_FORMAT = '[%(asctime)s.%(msecs)03d] %(levelname)s - %(message)s [job_id: %(jobid)]'
     DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
     _log_setting = None
 
-    def __init__(self, mode: str, config: Config):
+    def __init__(self, mode: str, config: Config, job_id: Optional[str]):
         self._mode = mode
         self._config = config
+        self._job_id = job_id
 
     def load(self):
         if LogSetting._log_setting is None:

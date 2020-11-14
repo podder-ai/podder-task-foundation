@@ -1,6 +1,6 @@
 import logging
 import time
-from typing import Dict
+from typing import Dict, Optional
 
 from podder_task_foundation.config import Config
 
@@ -8,9 +8,15 @@ from .base_logger import BaseLogger
 
 
 class ProcessLogger(BaseLogger):
-    def __init__(self, mode: str, config: Config, process_name: str):
-        super().__init__(mode, config)
+    def __init__(self,
+                 mode: str,
+                 config: Config,
+                 process_name: str,
+                 job_id: Optional[str] = None,
+                 process_id: Optional[str] = None):
+        super().__init__(mode, config, job_id)
         self._process_name = process_name
+        self._process_id = process_id
         self._start_task()
 
     def _start_task(self):
@@ -47,6 +53,8 @@ class ProcessLogger(BaseLogger):
     def _create_extra(self) -> Dict:
         extra = {
             'progresstime': str(round((time.time() - self._start_time), 3)),
-            'processname': str(self._process_name)
+            'processname': str(self._process_name),
+            'jobid': str(self._job_id or ""),
+            'processid': str(self._process_id or "")
         }
         return extra

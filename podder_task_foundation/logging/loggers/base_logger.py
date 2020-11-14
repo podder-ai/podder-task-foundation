@@ -12,12 +12,13 @@ from ..log_setting import LogSetting
 class BaseLogger(object):
     TRACE_LOG_LEVEL = 5
 
-    def __init__(self, mode: str, config: Config):
+    def __init__(self, mode: str, config: Config, job_id: Optional[str]):
         self._mode = mode
         self._config = config
+        self._job_id = job_id
         self._add_trace_level()
         self._logger = self._get_logger()
-        self.setting = LogSetting(mode, config).load()
+        self.setting = LogSetting(mode, config, job_id).load()
 
     @staticmethod
     def _get_logger() -> Optional[logging.Logger]:
@@ -64,7 +65,7 @@ class BaseLogger(object):
         self._logger.log(level, self._convert_newline_character(msg), extra=extra, *args, **kwargs)
 
     def _create_extra(self) -> Dict:
-        return {}
+        return {"jobid": str(self._job_id or '')}
 
     def _configure_logger(self, log_format: str, color_log_format: str, log_level):
         self._logger.setLevel(log_level)
