@@ -26,7 +26,7 @@ class Context(object):
 
     @property
     def process_id(self) -> Optional[str]:
-        return self._process_id
+        return self._process_id or UID.generate()
 
     @property
     def process_name(self) -> Optional[str]:
