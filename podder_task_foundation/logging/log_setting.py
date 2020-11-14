@@ -7,7 +7,7 @@ from podder_task_foundation.config import Config
 
 class LogSetting:
     TASK_NAME_PATH = 'task_name.ini'
-    DEFAULT_FORMAT = '[%(asctime)s.%(msecs)03d] %(levelname)s - %(message)s [job_id: %(jobid)]'
+    DEFAULT_FORMAT = '[%(asctime)s.%(msecs)03d] %(jobid)s %(levelname)s - %(message)s'
     DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
     _log_setting = None
 

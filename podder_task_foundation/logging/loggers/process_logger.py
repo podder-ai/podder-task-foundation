@@ -17,6 +17,7 @@ class ProcessLogger(BaseLogger):
         super().__init__(mode, config, job_id)
         self._process_name = process_name
         self._process_id = process_id
+        self._job_id = job_id
         self._start_task()
 
     def _start_task(self):

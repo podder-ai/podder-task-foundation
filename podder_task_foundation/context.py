@@ -22,11 +22,11 @@ class Context(object):
 
     @property
     def job_id(self) -> Optional[str]:
-        return self._job_id or UID.generate()
+        return self._job_id
 
     @property
     def process_id(self) -> Optional[str]:
-        return self._process_id or UID.generate()
+        return self._process_id
 
     @property
     def process_name(self) -> Optional[str]:
@@ -48,7 +48,7 @@ class Context(object):
                  job_id: Optional[str] = None,
                  process_id: Optional[str] = None) -> None:
         self._mode = mode
-        self._job_id = job_id
+        self._job_id = job_id or UID.generate()
         self._process_id = process_id
         self._process_name = process_name
         self._config = Config(self._mode, config_path)
