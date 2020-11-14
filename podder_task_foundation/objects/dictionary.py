@@ -1,8 +1,9 @@
 import json
-import yaml
 from collections import OrderedDict
 from pathlib import Path
 from typing import Any, Optional, Union
+
+import yaml
 
 from podder_task_foundation.utilities import DataFileLoader
 
