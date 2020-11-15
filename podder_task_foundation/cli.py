@@ -103,8 +103,7 @@ class CLI(object):
 
     @staticmethod
     def _execute_single_process(name: str, _input: Payload, config_path: Path) -> Payload:
-        process_config_path = config_path.joinpath(name)
-        context = Context(mode=MODE.CONSOLE, process_name=name, config_path=process_config_path)
+        context = Context(mode=MODE.CONSOLE, process_name=name, config_path=config_path)
         process_module = importlib.import_module('processes.{}.process'.format(name))
         process = process_module.Process(mode=MODE.CONSOLE, context=context)
 

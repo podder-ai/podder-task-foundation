@@ -59,13 +59,11 @@ class Pipeline(object):
             return self._process_cache[name]
         logger = None
         if self._context.is_process_context:
-            process_config_path = self._context.config.path.parent.joinpath(name)
             logger = self._context.logger
-        else:
-            process_config_path = self._context.config.path.joinpath(name)
+
         context = Context(mode=self._context.mode,
                           process_name=name,
-                          config_path=process_config_path,
+                          config_path=self._context.shared_config.path,
                           job_id=self._context.job_id,
                           logger=logger)
         process_module = importlib.import_module('processes.{}.process'.format(name))

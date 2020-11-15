@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from .config import Config
+from .config import Config, ProcessConfig, SharedConfig
 from .file import File
 from .logging.loggers import BaseLogger, ProcessLogger
 from .utilities import UID
@@ -11,6 +11,10 @@ class Context(object):
     @property
     def config(self) -> Config:
         return self._config
+
+    @property
+    def shared_config(self) -> SharedConfig:
+        return self._shared_config
 
     @property
     def file(self) -> File:
@@ -51,7 +55,14 @@ class Context(object):
         self._job_id = job_id or UID.generate()
         self._process_id = process_id
         self._process_name = process_name
-        self._config = Config(self._mode, config_path)
+        self._shared_config = SharedConfig(self._mode, path=config_path)
+        if self._process_name is not None:
+            self._config = ProcessConfig(self._mode,
+                                         process_name=self._process_name,
+                                         path=config_path)
+        else:
+            self._config = self._shared_config
+
         self._file = File(process_name, self._config)
         self._logger = logger or self._get_logger()
 
