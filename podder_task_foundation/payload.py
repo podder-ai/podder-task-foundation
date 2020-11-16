@@ -109,7 +109,7 @@ class Payload(object):
     def get(self,
             name: Optional[str] = None,
             object_type: Union[None, str, List[str]] = None,
-            extension: Union[None, str, List[str]] = None) -> Object:
+            extension: Union[None, str, List[str]] = None) -> Optional[Object]:
         if isinstance(object_type, str):
             object_type = [object_type]
         if isinstance(extension, str):
