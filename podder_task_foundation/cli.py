@@ -42,6 +42,11 @@ class CLI(object):
                             dest='verbose',
                             action='store_true',
                             help='Set verbose mode')
+        parser.add_argument('-d',
+                            '--debug',
+                            dest='debug',
+                            action='store_true',
+                            help='Enable debug mode')
         parser.add_argument('-c',
                             '--config',
                             nargs='?',
@@ -74,7 +79,9 @@ class CLI(object):
         else:
             config_path = Path(arguments.config)
 
-        context = Context(mode=MODE.CONSOLE, config_path=config_path)
+        context = Context(mode=MODE.CONSOLE, config_path=config_path, debug_mode=arguments.debug)
+        if context.debug_mode:
+            context.logger.debug("Debug mode enabled")
         start_time = time.time()
         if arguments.verbose:
             context.logger.info("Start Process: Job ID: {}".format(context.job_id))
@@ -84,9 +91,13 @@ class CLI(object):
             output = self._execute_single_process(process_name,
                                                   _input,
                                                   config_path=config_path,
-                                                  job_id=context.job_id)
+                                                  job_id=context.job_id,
+                                                  debug_mode=context.debug_mode)
         else:
-            output = self._execute_pipeline(_input, config_path=config_path, job_id=context.job_id)
+            output = self._execute_pipeline(_input,
+                                            config_path=config_path,
+                                            job_id=context.job_id,
+                                            debug_mode=context.debug_mode)
 
         data = output.all()
         if output_exists:
@@ -173,11 +184,13 @@ class CLI(object):
     def _execute_single_process(name: str,
                                 _input: Payload,
                                 config_path: Path,
-                                job_id: Optional[str] = None) -> Payload:
+                                job_id: Optional[str] = None,
+                                debug_mode: bool = False) -> Payload:
         context = Context(mode=MODE.CONSOLE,
                           process_name=name,
                           config_path=config_path,
-                          job_id=job_id)
+                          job_id=job_id,
+                          debug_mode=debug_mode)
         process_module = importlib.import_module('processes.{}.process'.format(name))
         process = process_module.Process(mode=MODE.CONSOLE, context=context)
 
@@ -185,8 +198,14 @@ class CLI(object):
         return output
 
     @staticmethod
-    def _execute_pipeline(_input: Payload, config_path: Path, job_id: Optional[str]) -> Payload:
-        context = Context(mode=MODE.CONSOLE, config_path=config_path, job_id=job_id)
+    def _execute_pipeline(_input: Payload,
+                          config_path: Path,
+                          job_id: Optional[str],
+                          debug_mode: bool = False) -> Payload:
+        context = Context(mode=MODE.CONSOLE,
+                          config_path=config_path,
+                          job_id=job_id,
+                          debug_mode=debug_mode)
         blueprint = context.config.get("pipeline", default=None)
         pipeline = Pipeline(blueprint=blueprint, context=context)
 

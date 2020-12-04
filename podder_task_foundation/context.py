@@ -41,6 +41,10 @@ class Context(object):
         return self._logger
 
     @property
+    def debug_mode(self) -> bool:
+        return self._debug
+
+    @property
     def is_process_context(self) -> bool:
         return self._process_name is not None
 
@@ -50,7 +54,8 @@ class Context(object):
                  config_path: Optional[Path] = None,
                  logger: Optional[BaseLogger] = None,
                  job_id: Optional[str] = None,
-                 process_id: Optional[str] = None) -> None:
+                 process_id: Optional[str] = None,
+                 debug_mode: bool = False) -> None:
         self._mode = mode
         self._job_id = job_id or UID.generate()
         self._process_id = process_id
@@ -63,8 +68,13 @@ class Context(object):
         else:
             self._config = self._shared_config
 
-        self._file = File(process_name, self._config)
+        self._debug = debug_mode
         self._logger = logger or self._get_logger()
+        self._file = File(process_name=process_name,
+                          config=self._config,
+                          job_id=self._job_id,
+                          logger=self._logger,
+                          debug_mode=debug_mode)
 
     def _get_logger(self) -> BaseLogger:
         return ProcessLogger(mode=self.mode,

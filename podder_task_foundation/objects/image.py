@@ -4,7 +4,6 @@ from typing import Optional
 from PIL import Image as PILImage, ImageOps
 
 from .lazy_load_file import LazyLoadFile
-from .object import Object
 
 
 class Image(LazyLoadFile):
