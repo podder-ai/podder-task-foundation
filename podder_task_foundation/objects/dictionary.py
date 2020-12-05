@@ -38,7 +38,7 @@ class Dictionary(Object):
     def to_json(self) -> str:
         return json.dumps(self._data, cls=NumpyJsonEncoder, ensure_ascii=False)
 
-    def save(self, path: Path):
+    def save(self, path: Path) -> bool:
         file_type = DataFileLoader().get_file_type(path)
         if file_type is None:
             return False
@@ -50,6 +50,8 @@ class Dictionary(Object):
         if file_type == "json":
             path.write_text(self.to_json())
             return True
+
+        return False
 
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None):

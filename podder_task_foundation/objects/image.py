@@ -38,8 +38,10 @@ class Image(LazyLoadFile):
         raw_data = PILImage.open(str(self._path))
         self._data = ImageOps.exif_transpose(raw_data)
 
-    def save(self, path: Path):
+    def save(self, path: Path) -> bool:
         if path.suffix == ".jpg" or path.suffix == ".jpeg":
             self.data.save(str(path), quality=90)
         else:
             self.data.save(str(path))
+
+        return True

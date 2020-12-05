@@ -61,9 +61,11 @@ class Object(object):
             return self._path.suffix
         return ""
 
-    def save(self, path: Path):
+    def save(self, path: Path) -> bool:
         with path.open(mode='wb') as file:
             pickle.dump(self._data, file)
+
+        return True
 
     def rename(self, name: str):
         self._name = name

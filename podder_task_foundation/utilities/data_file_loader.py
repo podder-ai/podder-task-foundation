@@ -1,3 +1,4 @@
+import csv
 import json
 from collections import OrderedDict
 from pathlib import Path
@@ -22,6 +23,7 @@ class DataFileLoader(object):
         ".yaml": "yaml",
         ".yml": "yaml",
         ".toml": "toml",
+        ".csv": "csv",
     }
 
     def __init__(self):
@@ -38,6 +40,12 @@ class DataFileLoader(object):
             data = yaml.load(path.read_text(), Loader=yaml.SafeLoader)
         elif file_format == "toml":
             data = toml.loads(path.read_text(), _dict=OrderedDict)
+        elif file_format == "csv":
+            data = []
+            with path.open() as file_handler:
+                reader = csv.reader(file_handler)
+                for row in reader:
+                    data.append(row)
 
         return data
 

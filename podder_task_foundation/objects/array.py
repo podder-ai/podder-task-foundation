@@ -1,3 +1,4 @@
+import csv
 import json
 from pathlib import Path
 from typing import List, Optional
@@ -39,8 +40,18 @@ class Array(Object):
             path.write_text(json.dumps(self._data))
             return True
 
+        if file_type == "csv":
+            with path.open("w") as file_handler:
+                writer = csv.writer(file_handler)
+                for row in self._data:
+                    writer.writerow(row)
+
+            return True
+
+        return False
+
     @classmethod
-    def load(cls, path: Path, name: Optional[str] = None):
+    def load(cls, path: Path, name: Optional[str] = None) -> Object:
         data = DataFileLoader().load(path)
         return cls(data, path=path, name=cls._get_name(path, name))
 
@@ -56,6 +67,9 @@ class Array(Object):
         file_type = DataFileLoader().get_file_type(path)
         if file_type is None:
             return False
+
+        if file_type == "csv":
+            return True
 
         if file_type == "json":
             if data[0] == "[":
