@@ -34,13 +34,9 @@ class Config(object):
 
     def _load_config(self, path: Path):
         if not path.exists():
-            raise DirectoryNotFoundError(path,
-                                         detail="Config directory should be placed on " +
-                                         str(path.resolve()) + " even if it is empty",
-                                         how_to_solve="Create config directory on " +
-                                         str(path.resolve()),
-                                         reference_url="")
-        self._data = self._load_config_directory(path)
+            self._data = {}
+        else:
+            self._data = self._load_config_directory(path)
 
     def _load_config_directory(self, path: Path) -> Optional[dict]:
         data = {}
