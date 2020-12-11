@@ -35,14 +35,14 @@ class DataFileLoader(object):
             raise UnsupportedFileFormatError(path)
         data = None
         if file_format == "json":
-            data = json.loads(path.read_text(), object_pairs_hook=OrderedDict)
+            data = json.loads(path.read_text(encoding='utf-8'), object_pairs_hook=OrderedDict)
         elif file_format == "yaml":
-            data = yaml.load(path.read_text(), Loader=yaml.SafeLoader)
+            data = yaml.load(path.read_text(encoding='utf-8'), Loader=yaml.SafeLoader)
         elif file_format == "toml":
-            data = toml.loads(path.read_text(), _dict=OrderedDict)
+            data = toml.loads(path.read_text(encoding='utf-8'), _dict=OrderedDict)
         elif file_format == "csv":
             data = []
-            with path.open() as file_handler:
+            with path.open(encoding='utf-8') as file_handler:
                 reader = csv.reader(file_handler)
                 for row in reader:
                     data.append(row)

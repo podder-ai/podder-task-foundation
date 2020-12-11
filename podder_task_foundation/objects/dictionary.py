@@ -44,11 +44,11 @@ class Dictionary(Object):
             return False
 
         if file_type == "yaml":
-            path.write_text(yaml.dump(self._data))
+            path.write_text(yaml.dump(self._data), encoding='utf-8')
             return True
 
         if file_type == "json":
-            path.write_text(self.to_json())
+            path.write_text(self.to_json(), encoding='utf-8')
             return True
 
         return False
