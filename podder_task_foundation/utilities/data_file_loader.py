@@ -29,20 +29,20 @@ class DataFileLoader(object):
     def __init__(self):
         pass
 
-    def load(self, path: Path) -> Union[Dict, List]:
+    def load(self, path: Path, encoding: Optional[str] = 'utf-8') -> Union[Dict, List]:
         file_format = self.get_file_type(path)
         if file_format is None:
             raise UnsupportedFileFormatError(path)
         data = None
         if file_format == "json":
-            data = json.loads(path.read_text(encoding='utf-8'), object_pairs_hook=OrderedDict)
+            data = json.loads(path.read_text(encoding=encoding), object_pairs_hook=OrderedDict)
         elif file_format == "yaml":
-            data = yaml.load(path.read_text(encoding='utf-8'), Loader=yaml.SafeLoader)
+            data = yaml.load(path.read_text(encoding=encoding), Loader=yaml.SafeLoader)
         elif file_format == "toml":
-            data = toml.loads(path.read_text(encoding='utf-8'), _dict=OrderedDict)
+            data = toml.loads(path.read_text(encoding=encoding), _dict=OrderedDict)
         elif file_format == "csv":
             data = []
-            with path.open(encoding='utf-8') as file_handler:
+            with path.open(encoding=encoding) as file_handler:
                 reader = csv.reader(file_handler)
                 for row in reader:
                     data.append(row)

@@ -38,17 +38,17 @@ class Dictionary(Object):
     def to_json(self) -> str:
         return json.dumps(self._data, cls=NumpyJsonEncoder, ensure_ascii=False)
 
-    def save(self, path: Path) -> bool:
+    def save(self, path: Path, encoding: Optional[str] = 'utf-8') -> bool:
         file_type = DataFileLoader().get_file_type(path)
         if file_type is None:
             return False
 
         if file_type == "yaml":
-            path.write_text(yaml.dump(self._data), encoding='utf-8')
+            path.write_text(yaml.dump(self._data), encoding=encoding)
             return True
 
         if file_type == "json":
-            path.write_text(self.to_json(), encoding='utf-8')
+            path.write_text(self.to_json(), encoding=encoding)
             return True
 
         return False
