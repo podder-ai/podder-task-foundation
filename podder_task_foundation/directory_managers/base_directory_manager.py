@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any, Optional
 
-from ..exceptions import DirectoryNotFoundError
+from ..exceptions import DirectoryNotFoundError, ProcessError
 from ..logging.loggers import BaseLogger
 
 
@@ -19,12 +19,20 @@ class BaseDirectoryManager(object):
             self._base_path = None
         else:
             self._base_path = Path(base_path)
+            if self._process_name is not None:
+                self._base_path = self._base_path.joinpath(self._process_name)
+
         self._job_id = job_id
         self._logger = logger
         self._debug_mode = debug_mode
 
     def _check_base_path(self):
-        if not Path(self._base_path).exists():
+        if self._base_path is None:
+            raise ProcessError(message="Base directory is not set",
+                               detail="",
+                               how_to_solve="",
+                               reference_url="")
+        if not self._base_path.exists():
             raise DirectoryNotFoundError(
                 self._base_path,
                 detail="{} directory should be placed on {}".format(self._name,
