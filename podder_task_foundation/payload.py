@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict, Generator, List, Optional, Union
 
 from .exceptions import WrongDataFormatError
-from .objects import Array, Dictionary, Image, Object, factory
+from .objects import Array, Dictionary, Object, factory
 
 
 class Payload(object):
@@ -90,9 +90,9 @@ class Payload(object):
         data = Array(data=array, name=name)
         self.add(data)
 
-    def add_image(self, image: object, name: Optional[str] = None):
-        data = Image(data=image, name=name)
-        self.add(data)
+#    def add_image(self, image: object, name: Optional[str] = None):
+#        data = Image(data=image, name=name)
+#        self.add(data)
 
     def all(self,
             name: Optional[str] = None,
@@ -116,12 +116,12 @@ class Payload(object):
             extension = [extension]
         return self._first(name=name, object_types=object_type, extensions=extension)
 
-    def get_image(self, name: Optional[str] = None) -> Optional[object]:
-        image = self.get(name=name, object_type="image")
-        if image is not None:
-            return image.data
-
-        return None
+#    def get_image(self, name: Optional[str] = None) -> Optional[object]:
+#        image = self.get(name=name, object_type="image")
+#        if image is not None:
+#            return image.data
+#
+#        return None
 
     def get_data(self, name: Optional[str] = None) -> Optional[Union[Dict, List]]:
         data = self.get(name, ["dictionary", "array"])
@@ -130,10 +130,10 @@ class Payload(object):
 
         return None
 
-    def all_images(self, name: Optional[str] = None) -> Generator[object, None, None]:
-        images = self.all(name, object_type="image")
-        for image in images:
-            yield image.data
+ #   def all_images(self, name: Optional[str] = None) -> Generator[object, None, None]:
+ #       images = self.all(name, object_type="image")
+ #       for image in images:
+ #           yield image.data
 
     def copy(self) -> object:
         return copy.deepcopy(self)
@@ -143,3 +143,13 @@ class Payload(object):
             self.add(_object)
 
         return
+
+    def __getattr__(self, name: str):
+        if name.startswith("get_"):
+            pass
+        if name.startswith("add_"):
+            pass
+        if name.startswith("all_"):
+            pass
+
+        return self.__getattribute__(name)
