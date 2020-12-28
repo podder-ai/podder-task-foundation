@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict, Generator, List, Optional, Union
 
 from .exceptions import WrongDataFormatError
-from .objects import Array, Dictionary, Image, Object, factory
+from .objects import PDF, Array, Dictionary, Image, Object, factory
 
 
 class Payload(object):
@@ -92,6 +92,10 @@ class Payload(object):
 
     def add_image(self, image: object, name: Optional[str] = None):
         data = Image(data=image, name=name)
+        self.add(data)
+
+    def add_pdf(self, pdf: Path, name: Optional[str] = None):
+        data = PDF(data=pdf, name=name)
         self.add(data)
 
     def all(self,
