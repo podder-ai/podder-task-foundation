@@ -27,21 +27,21 @@ class Array(Object):
     def to_json(self) -> str:
         return json.dumps(self._data)
 
-    def save(self, path: Path) -> bool:
+    def save(self, path: Path, encoding: Optional[str] = 'utf-8') -> bool:
         file_type = DataFileLoader().get_file_type(path)
         if file_type is None:
             return False
 
         if file_type == "yaml":
-            path.write_text(yaml.dump(self._data))
+            path.write_text(yaml.dump(self._data), encoding=encoding)
             return True
 
         if file_type == "json":
-            path.write_text(json.dumps(self._data))
+            path.write_text(json.dumps(self._data), encoding=encoding)
             return True
 
         if file_type == "csv":
-            with path.open("w") as file_handler:
+            with path.open("w", encoding=encoding) as file_handler:
                 writer = csv.writer(file_handler)
                 for row in self._data:
                     writer.writerow(row)
