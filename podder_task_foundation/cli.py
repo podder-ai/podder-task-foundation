@@ -53,6 +53,11 @@ class CLI(object):
                             default="",
                             type=str,
                             help='Input files (you can pass file[s] or directory)')
+        parser.add_argument('-w',
+                            '--overwrite',
+                            dest='overwrite',
+                            action='store_true',
+                            help='Overwrite output file even if the files already exist')
         return parser
 
     def execute(self):
@@ -60,7 +65,7 @@ class CLI(object):
 
         output_files = arguments.output
         output_exists, should_output_to_directory, output_paths = self.check_output_type(
-            output_files)
+            output_files, overwrite=arguments.overwrite)
 
         _input = Payload()
         files = arguments.input
@@ -140,7 +145,9 @@ class CLI(object):
         if arguments.verbose:
             context.logger.info("Process completed: It takes {} second(s).".format(process_time))
 
-    def check_output_type(self, output_names: [str]) -> (bool, bool, Union[None, Dict[str, Path]]):
+    def check_output_type(self,
+                          output_names: [str],
+                          overwrite: bool = False) -> (bool, bool, Union[None, Dict[str, Path]]):
         if output_names is None or len(output_names) == 0:
             return False, False, None
 
@@ -150,7 +157,7 @@ class CLI(object):
             if output_path.exists():
                 if output_path.is_dir():
                     return True, True, {name: output_path}
-                else:
+                elif not overwrite:
                     raise Exception("Output file {} already exists.".format(output_path))
 
             if output_path.suffix == "":
@@ -166,7 +173,7 @@ class CLI(object):
                     raise Exception(
                         "Output path {} is a directory. you cannot specify directory when you set multiple outputs"
                         .format(output_path))
-                else:
+                elif not overwrite:
                     raise Exception("Output file {} already exists.".format(output_path))
 
             if name == self._no_name_key:
