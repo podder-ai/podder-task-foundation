@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 from typing import Any, Optional
 
@@ -25,7 +26,7 @@ class LazyLoadFile(Object):
         self._data = ""
 
     def save(self, path: Path) -> bool:
-        pass
+        shutil.copy(self._data, path)
 
     @property
     def data(self):

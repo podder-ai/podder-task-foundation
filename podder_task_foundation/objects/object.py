@@ -1,5 +1,6 @@
 import copy
 import pickle
+import shutil
 from pathlib import Path
 from typing import Any, Optional, Union
 
@@ -64,6 +65,14 @@ class Object(object):
     def save(self, path: Path) -> bool:
         with path.open(mode='wb') as file:
             pickle.dump(self._data, file)
+
+        return True
+
+    def copy(self, path: Path) -> bool:
+        if self.path is None:
+            return self.save(path)
+        else:
+            shutil.copy(self.path, path)
 
         return True
 

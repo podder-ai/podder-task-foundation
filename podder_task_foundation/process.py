@@ -1,7 +1,7 @@
 import logging
 import sys
 import traceback
-from typing import Any, Optional
+from typing import Optional
 
 from .context import Context
 from .exceptions import ProcessError
@@ -40,6 +40,9 @@ class Process(object):
     def handle(self, input_: Optional[Payload] = None) -> Payload:
         output = Payload()
 
+        if self.context.debug_mode:
+            self.store_payload_for_debug(input_, "input")
+
         logger = self.context.logger
         sys.stdout = StreamToLogger(logger)
         sys.stderr = StreamToLogger(logger, log_level=logging.ERROR)
@@ -56,11 +59,22 @@ class Process(object):
         except KeyboardInterrupt as exception:
             raise exception
 
-
-#        except Exception as exception:
-#            self.context.logger.error("".join(traceback.format_exception()))
+        if self.context.debug_mode:
+            self.store_payload_for_debug(output, "output")
 
         return output
 
     def execute(self, input_payload: Payload, output_payload: Payload, context: Context):
         pass
+
+    def store_payload_for_debug(self, payload: Payload, directory_name: str) -> None:
+        for _object in payload.all():
+            directory_path = self.context.file.temporary_directory.get(directory_name)
+            if not directory_path.exists():
+                directory_path.mkdir()
+
+            if _object.path is not None:
+                object_path = directory_path.joinpath(_object.path.name)
+            else:
+                object_path = directory_path.joinpath(_object.name + _object.default_extension)
+            _object.copy(object_path)
