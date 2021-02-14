@@ -1,4 +1,5 @@
 import copy
+import fnmatch
 from pathlib import Path
 from typing import Dict, Generator, List, Optional, Union
 
@@ -13,19 +14,28 @@ class Payload(object):
     def __getitem__(self, name):
         return self.get(name=name)
 
+    @staticmethod
+    def _should_be_target(target_object: [Object],
+                          name: Optional[str] = None,
+                          object_types: Optional[List[str]] = None,
+                          extensions: Optional[List[str]] = None) -> True:
+        if name is not None and not fnmatch.fnmatch(target_object.name, name):
+            return False
+        if object_types is not None and target_object.type not in object_types:
+            return False
+        if extensions is not None and target_object.path is not None and target_object.path.suffix not in extensions:
+            return False
+
+        return True
+
     def _filter(self,
                 name: Optional[str] = None,
                 object_types: Optional[List[str]] = None,
                 extensions: Optional[List[str]] = None) -> [Object]:
         result = []
         for _object in self._data:
-            if name is not None and _object.name != name:
-                continue
-            if object_types is not None and _object.type not in object_types:
-                continue
-            if extensions is not None and _object.path is not None and _object.path.suffix not in extensions:
-                continue
-            result.append(_object)
+            if self._should_be_target(_object, name, object_types, extensions):
+                result.append(_object)
 
         return result
 
@@ -34,13 +44,8 @@ class Payload(object):
                object_types: Optional[List[str]] = None,
                extensions: Optional[List[str]] = None) -> Optional[Object]:
         for _object in self._data:
-            if name is not None and _object.name != name:
-                continue
-            if object_types is not None and _object.type not in object_types:
-                continue
-            if extensions is not None and _object.path is not None and _object.path.suffix not in extensions:
-                continue
-            return _object
+            if self._should_be_target(_object, name, object_types, extensions):
+                return _object
 
         return None
 
