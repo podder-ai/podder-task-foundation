@@ -1,4 +1,4 @@
-import csv
+from csv import DictReader
 import json
 from collections import OrderedDict
 from pathlib import Path
@@ -42,10 +42,9 @@ class DataFileLoader(object):
             data = toml.loads(path.read_text(encoding=encoding), _dict=OrderedDict)
         elif file_format == "csv":
             data = []
-            with path.open(encoding=encoding) as file_handler:
-                reader = csv.reader(file_handler)
-                for row in reader:
-                    data.append(row)
+            with open(path, encoding=encoding) as read_object:
+                dict_object = DictReader(read_object)
+                data = list(dict_object)
 
         return data
 
