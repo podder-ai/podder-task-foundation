@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "podder-task-foundation"
-version = "0.1.16"
+version = "0.1.17"
 description = ""
 authors = ["Takaaki Mizuno <takaaki.mizuno@gmail.com>"]
 

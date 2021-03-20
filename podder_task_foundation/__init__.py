@@ -7,4 +7,4 @@ from .singleton import Singleton
 
 __all__ = ['Context', 'MODE', 'Process', 'Payload', 'Singleton', "CLI"]
 
-__version__ = '0.1.16'
+__version__ = '0.1.17'
