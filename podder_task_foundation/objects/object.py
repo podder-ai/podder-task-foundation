@@ -44,6 +44,9 @@ class Object(object):
     def to_str(self) -> str:
         return "<Type: {}>".format(self.type)
 
+    def get_data(self, data_format: str = "") -> Any:
+        return self.data
+
     @property
     def data(self) -> Any:
         return self._data

@@ -133,7 +133,7 @@ class Payload(object):
         return None
 
     def get_data(self, name: Optional[str] = None) -> Optional[Union[Dict, List]]:
-        data = self.get(name, ["dictionary", "array"])
+        data = self.get(name, ["dictionary", "array", "csv"])
         if data is not None:
             return data.data
 

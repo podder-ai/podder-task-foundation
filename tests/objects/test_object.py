@@ -4,7 +4,7 @@ from podder_task_foundation.objects import Dictionary, factory
 
 
 def test_image_create():
-    _object = factory(Path(__file__).parent.joinpath("data", "image_01.png"))
+    _object = factory(Path(__file__).parent.parent.joinpath("data", "image_01.png"))
     assert _object.type == "image"
 
     file_name = _object.get_file_name()

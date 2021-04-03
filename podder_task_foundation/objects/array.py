@@ -12,7 +12,7 @@ from .object import Object
 
 
 class Array(Object):
-    supported_extensions = [".json", ".yaml", ".csv"]
+    supported_extensions = [".json", ".yaml"]
     type = "array"
     default_extension = ".json"
 
@@ -39,14 +39,6 @@ class Array(Object):
 
         if file_type == "json":
             path.write_text(self.to_json(), encoding=encoding)
-            return True
-
-        if file_type == "csv":
-            with path.open("w", encoding=encoding) as file_handler:
-                writer = csv.writer(file_handler)
-                for row in self._data:
-                    writer.writerow(row)
-
             return True
 
         return False
