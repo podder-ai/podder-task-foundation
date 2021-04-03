@@ -7,7 +7,7 @@ from .lazy_load_file import LazyLoadFile
 
 class CSV(LazyLoadFile):
     supported_extensions = [".csv"]
-    type = "csv"
+    type = "array"
     default_extension = ".csv"
 
     def __init__(self,
