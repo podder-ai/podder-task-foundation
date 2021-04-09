@@ -75,7 +75,7 @@ class CSV(LazyLoadFile):
             return True
 
         header = self.data[0].keys()
-        with path.open(mode="w", encoding=encoding) as file_handler:
+        with path.open(mode="w", encoding=encoding, newline="") as file_handler:
             writer = csv.DictWriter(file_handler, fieldnames=header)
             writer.writeheader()
             for row in self.data:
@@ -84,7 +84,7 @@ class CSV(LazyLoadFile):
         return True
 
     def _save_array(self, path: Path, encoding: Optional[str] = 'utf-8') -> bool:
-        with path.open(mode="w", encoding=encoding) as file_handler:
+        with path.open(mode="w", encoding=encoding, newline="") as file_handler:
             writer = csv.writer(file_handler)
             for row in self.data:
                 writer.writerow(row)

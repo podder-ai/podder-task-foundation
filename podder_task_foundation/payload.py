@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Dict, Generator, List, Optional, Union
 
 from .exceptions import WrongDataFormatError
-from .objects import PDF, Array, Dictionary, Image, Object, factory
+from .objects import CSV, PDF, Array, Dictionary, Image, Object, factory
 
 
 class Payload(object):
@@ -86,7 +86,10 @@ class Payload(object):
         data = Dictionary(data=dictionary, name=name)
         self.add(data)
 
-    def add_array(self, array: list, name: Optional[str] = None):
+    def add_array(self, array: Union[list, Object], name: Optional[str] = None):
+        if isinstance(array, CSV):
+            self.add(array, name=name)
+            return
         if not isinstance(array, list):
             raise WrongDataFormatError(
                 detail="Format is not list for name {}. Got {}".format(
