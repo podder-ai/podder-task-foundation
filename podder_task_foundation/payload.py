@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Dict, Generator, List, Optional, Union
 
 from .exceptions import WrongDataFormatError
-from .objects import Array, Dictionary, Object, factory
+from .objects import CSV, PDF, Array, Dictionary, Object, factory
 
 
 class Payload(object):
@@ -86,7 +86,10 @@ class Payload(object):
         data = Dictionary(data=dictionary, name=name)
         self.add(data)
 
-    def add_array(self, array: list, name: Optional[str] = None):
+    def add_array(self, array: Union[list, Object], name: Optional[str] = None):
+        if isinstance(array, CSV):
+            self.add(array, name=name)
+            return
         if not isinstance(array, list):
             raise WrongDataFormatError(
                 detail="Format is not list for name {}. Got {}".format(
@@ -133,16 +136,16 @@ class Payload(object):
 #        return None
 
     def get_data(self, name: Optional[str] = None) -> Optional[Union[Dict, List]]:
-        data = self.get(name, ["dictionary", "array"])
+        data = self.get(name, ["dictionary", "array", "csv"])
         if data is not None:
             return data.data
 
         return None
 
- #   def all_images(self, name: Optional[str] = None) -> Generator[object, None, None]:
- #       images = self.all(name, object_type="image")
- #       for image in images:
- #           yield image.data
+#   def all_images(self, name: Optional[str] = None) -> Generator[object, None, None]:
+#       images = self.all(name, object_type="image")
+#       for image in images:
+#           yield image.data
 
     def copy(self) -> object:
         return copy.deepcopy(self)

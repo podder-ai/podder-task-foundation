@@ -27,6 +27,7 @@ class LazyLoadFile(Object):
 
     def save(self, path: Path) -> bool:
         shutil.copy(self._data, path)
+        return True
 
     @property
     def data(self):

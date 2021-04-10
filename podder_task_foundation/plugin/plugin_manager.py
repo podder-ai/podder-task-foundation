@@ -1,8 +1,9 @@
-from .._compat import importlib_metadata
-from typing import Optional, Type, List
-from ..objects import Object
 import importlib
 from pathlib import Path
+from typing import List, Optional, Type
+
+from .._compat import importlib_metadata
+from ..objects import Object
 
 
 class PluginManager(object):
@@ -35,7 +36,8 @@ class PluginManager(object):
         classes = []
         for plugin in directory.glob("*.py"):
             name = plugin.stem
-            plugin_module = importlib.import_module('podder_task_foundation_plugins.objects.{}'.format(plugin.stem))
+            plugin_module = importlib.import_module(
+                'podder_task_foundation_plugins.objects.{}'.format(plugin.stem))
             classes.append(getattr(plugin_module, name))
 
         return classes

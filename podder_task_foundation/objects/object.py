@@ -47,6 +47,9 @@ class Object(object):
     def to_dict(self) -> dict:
         return {}
 
+    def get_data(self, data_format: str = "") -> Any:
+        return self.data
+
     @property
     def data(self) -> Any:
         return self._data

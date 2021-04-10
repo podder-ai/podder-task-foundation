@@ -8,14 +8,6 @@ def test_payload_create():
     assert payload
 
 
-def test_payload_load_image():
-    payload = Payload()
-    payload.add_file(Path(__file__).parent.joinpath("data", "image_01.png"))
-
-    image = payload.get_image()
-    assert image
-
-
 def test_payload_load_json_dictionary():
     payload = Payload()
     payload.add_file(Path(__file__).parent.joinpath("data", "dictionary_01.json"))
@@ -42,26 +34,12 @@ def test_payload_load_pdf():
     assert pdf_data
 
 
-def test_payload_load_named_image():
-    payload = Payload()
-    payload.add_file(Path(__file__).parent.joinpath("data", "image_01.png"), name="test")
-
-    image = payload.get_image()
-    assert image
-
-    image = payload.get_image("test")
-    assert image
-
-    image = payload.get_image("another")
-    assert not image
-
-
 def test_payload_load_directory():
     payload = Payload()
     payload.add_directory(Path(__file__).parent.joinpath("data"))
 
     objects = payload.all()
-    assert len(objects) == 5
+    assert len(objects) == 6
     assert objects[0].type == "array"
     assert objects[0].name == "array_01.json"
     assert objects[0].extension == ".json"

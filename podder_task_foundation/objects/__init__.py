@@ -1,17 +1,17 @@
 from pathlib import Path
 from typing import Optional
 
+from ..plugin import PluginManager
 from .array import Array
+from .csv import CSV
 from .dictionary import Dictionary
 from .file import File
+from .lazy_load_file import LazyLoadFile
 from .object import Object
 from .pdf import PDF
-from .lazy_load_file import LazyLoadFile
-from ..plugin import PluginManager
-
 
 _filetypes = PluginManager().get_filetype_classes()
-_filetypes.extend([PDF, Dictionary, Array])
+_filetypes.extend([PDF, Dictionary, Array, CSV])
 
 
 def factory(_file: Path) -> Optional[Object]:
@@ -25,4 +25,4 @@ def factory(_file: Path) -> Optional[Object]:
     return File.load(_file)
 
 
-__all__ = ["Object", "Dictionary", "Array", "PDF", "LazyLoadFile", "factory"]
+__all__ = ["Object", "Dictionary", "Array", "PDF", "LazyLoadFile", "CSV", "factory"]
