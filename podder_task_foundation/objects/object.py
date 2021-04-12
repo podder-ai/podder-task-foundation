@@ -47,9 +47,6 @@ class Object(object):
     def to_dict(self) -> dict:
         return {}
 
-    def get_data(self, data_format: str = "") -> Any:
-        return self.data
-
     @property
     def data(self) -> Any:
         return self._data
@@ -116,5 +113,5 @@ class Object(object):
 
         return path.name
 
-    def get(self, data_type: Optional[str] = None) -> Optional[object]:
-        return self._data
+    def get(self, data_format: Optional[str] = None) -> Optional[object]:
+        return self.data

@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List, Optional, Type
 
 from .._compat import importlib_metadata
-from ..objects import Object
+from ..objects.object import Object
 
 
 class PluginManager(object):

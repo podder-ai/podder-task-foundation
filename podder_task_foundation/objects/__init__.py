@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Type
 
 from ..plugin import PluginManager
 from .array import Array
@@ -23,6 +23,14 @@ def factory(_file: Path) -> Optional[Object]:
             return data_type.load(_file)
 
     return File.load(_file)
+
+
+def get_class_from_type(_type: str) -> Optional[Type[Object]]:
+    for data_type in _filetypes:
+        if data_type.type == _type:
+            return data_type
+
+    return None
 
 
 __all__ = ["Object", "Dictionary", "Array", "PDF", "LazyLoadFile", "CSV", "factory"]

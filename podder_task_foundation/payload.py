@@ -1,10 +1,11 @@
 import copy
 import fnmatch
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Dict, Generator, List, Optional, Union
+from typing import Any, Dict, Generator, List, Optional, Union
 
 from .exceptions import WrongDataFormatError
-from .objects import CSV, PDF, Array, Dictionary, Object, factory
+from .objects import CSV, Array, Dictionary, Object, factory, get_class_from_type
 
 
 class Payload(object):
@@ -98,13 +99,13 @@ class Payload(object):
         data = Array(data=array, name=name)
         self.add(data)
 
-#    def add_image(self, image: object, name: Optional[str] = None):
-#        data = Image(data=image, name=name)
-#        self.add(data)
+    #    def add_image(self, image: object, name: Optional[str] = None):
+    #        data = Image(data=image, name=name)
+    #        self.add(data)
 
-#    def add_pdf(self, pdf: Path, name: Optional[str] = None):
-#        data = PDF(data=pdf, name=name)
-#        self.add(data)
+    #    def add_pdf(self, pdf: Path, name: Optional[str] = None):
+    #        data = PDF(data=pdf, name=name)
+    #        self.add(data)
 
     def all(self,
             name: Optional[str] = None,
@@ -128,24 +129,12 @@ class Payload(object):
             extension = [extension]
         return self._first(name=name, object_types=object_type, extensions=extension)
 
-#    def get_image(self, name: Optional[str] = None) -> Optional[object]:
-#        image = self.get(name=name, object_type="image")
-#        if image is not None:
-#            return image.data
-#
-#        return None
-
     def get_data(self, name: Optional[str] = None) -> Optional[Union[Dict, List]]:
         data = self.get(name, ["dictionary", "array", "csv"])
         if data is not None:
             return data.data
 
         return None
-
-#   def all_images(self, name: Optional[str] = None) -> Generator[object, None, None]:
-#       images = self.all(name, object_type="image")
-#       for image in images:
-#           yield image.data
 
     def copy(self) -> object:
         return copy.deepcopy(self)
@@ -157,11 +146,42 @@ class Payload(object):
         return
 
     def __getattr__(self, name: str):
+        me = self
         if name.startswith("get_"):
-            pass
-        if name.startswith("add_"):
-            pass
+            _type = name[4:]
+            _object = get_class_from_type(_type)
+            if _object is not None:
+
+                def _get_object(_name: Optional[str] = None) -> Optional[Object]:
+                    _instance = me.get(name=_name, object_type=_type)
+                    if _instance is not None:
+                        return _instance.data
+                    return None
+
+                return _get_object
+
         if name.startswith("all_"):
-            pass
+            _type = name[4:]
+            _object = get_class_from_type(_type)
+            if _object is not None:
+
+                def _all_objects(_name: Optional[str] = None) -> Iterable[Object]:
+                    instances = me.all(name=_name, object_type=_type)
+                    for instance in instances:
+                        yield instance.data
+                    return None
+
+                return _all_objects
+
+        if name.startswith("add_"):
+            _type = name[4:]
+            _object = get_class_from_type(_type)
+            if _object is not None:
+
+                def _add_object(data: Any, _name: Optional[str] = None) -> Object:
+                    instance = _object(data=data, name=_name)
+                    return instance
+
+                return _add_object
 
         return self.__getattribute__(name)

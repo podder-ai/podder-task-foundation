@@ -17,14 +17,14 @@ class CSV(LazyLoadFile):
         super().__init__(data, path, name)
         self._row_type = "array"
 
-    def get_data(self, data_format: str = "array") -> Any:
-        return self._get_data(row_type=data_format)
+    def get(self, data_format: str = "array") -> Any:
+        return self._get(row_type=data_format)
 
     @property
     def data(self) -> Any:
-        return self._get_data(row_type="array")
+        return self.get(data_format="array")
 
-    def _get_data(self, row_type: str = "array"):
+    def _get(self, row_type: str = "array"):
         if row_type != "array" and row_type != "dict":
             row_type = "array"
         if self._data is None:
