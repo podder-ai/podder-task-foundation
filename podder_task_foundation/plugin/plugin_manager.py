@@ -4,6 +4,7 @@ from typing import List, Optional, Type
 
 from .._compat import importlib_metadata
 from ..objects.object import Object
+from ..utilities import Strings
 
 
 class PluginManager(object):
@@ -36,9 +37,10 @@ class PluginManager(object):
         classes = []
         for plugin in directory.glob("*.py"):
             name = plugin.stem
+            class_name = Strings().camel_case(name, True)
             plugin_module = importlib.import_module(
                 'podder_task_foundation_plugins.objects.{}'.format(plugin.stem))
-            classes.append(getattr(plugin_module, name))
+            classes.append(getattr(plugin_module, class_name))
 
         return classes
 

@@ -25,7 +25,7 @@ def test_csv_get_as_dict():
     _object = factory(Path(__file__).parent.parent.joinpath("data", "csv_01.csv"))
     assert _object.type == "array"
 
-    data = _object.get_data(data_format="dict")
+    data = _object.get(data_format="dict")
     assert isinstance(data, list)
     assert isinstance(data[0], OrderedDict)
 
@@ -34,7 +34,7 @@ def test_csv_get_data_after_get_as_dict():
     _object = factory(Path(__file__).parent.parent.joinpath("data", "csv_01.csv"))
     assert _object.type == "array"
 
-    data = _object.get_data(data_format="dict")
+    data = _object.get(data_format="dict")
     assert isinstance(data, list)
     assert isinstance(data[0], OrderedDict)
 
