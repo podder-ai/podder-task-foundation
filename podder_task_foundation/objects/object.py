@@ -44,8 +44,8 @@ class Object(object):
     def to_str(self) -> str:
         return "<Type: {}>".format(self.type)
 
-    def get_data(self, data_format: str = "") -> Any:
-        return self.data
+    def to_dict(self) -> dict:
+        return {}
 
     @property
     def data(self) -> Any:
@@ -112,3 +112,6 @@ class Object(object):
             return name
 
         return path.name
+
+    def get(self, data_format: Optional[str] = None) -> Optional[object]:
+        return self.data

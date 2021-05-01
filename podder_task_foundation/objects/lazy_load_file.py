@@ -45,3 +45,6 @@ class LazyLoadFile(Object):
             return False
 
         return True
+
+    def get(self, data_type: Optional[str] = None) -> Optional[object]:
+        return self.data
