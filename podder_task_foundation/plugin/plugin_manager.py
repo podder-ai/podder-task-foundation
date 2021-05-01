@@ -36,6 +36,8 @@ class PluginManager(object):
         directory = Path(objects.__file__).parent
         classes = []
         for plugin in directory.glob("*.py"):
+            if plugin.name == "__init__.py":
+                continue
             name = plugin.stem
             class_name = Strings().camel_case(name, True)
             plugin_module = importlib.import_module(
