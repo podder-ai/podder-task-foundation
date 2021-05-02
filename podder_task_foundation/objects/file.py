@@ -23,6 +23,9 @@ class File(Object):
     def save(self, path: Path):
         shutil.copy(self._data, path)
 
+    def get_file_name(self, base_path: Optional[Path] = None) -> Path:
+        return self._path
+
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None) -> Object:
         return cls(data=path, name=cls._get_name(path, name))

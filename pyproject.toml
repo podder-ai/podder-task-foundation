@@ -1,18 +1,17 @@
 [tool.poetry]
 name = "podder-task-foundation"
-version = "0.1.18"
+version = "0.2.0"
 description = ""
 authors = ["Takaaki Mizuno <takaaki.mizuno@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
-pillow = "^7.2.0"
 python-dotenv = "^0.15.0"
 colorlog = "^4.2.1"
 PyYAML = "^5.3.1"
 toml = "^0.10.1"
-numpy = "^1.19.2"
 ulid-py = "^1.1.0"
+importlib-metadata = { version = "^3.1.1", markers = "python_version < '3.8'" }
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
