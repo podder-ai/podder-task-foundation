@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from pathlib import Path
 
-from podder_task_foundation.objects import CSV, factory
+from podder_task_foundation.objects import factory
 
 
 def test_csv_create():

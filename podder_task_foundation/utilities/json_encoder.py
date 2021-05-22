@@ -1,15 +1,17 @@
+import importlib
 import json
-
-import numpy
 
 
 class NumpyJsonEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, numpy.integer):
-            return int(obj)
-        elif isinstance(obj, numpy.floating):
-            return float(obj)
-        elif isinstance(obj, numpy.ndarray):
-            return obj.tolist()
-        else:
-            return super(NumpyJsonEncoder, self).default(obj)
+        try:
+            numpy = importlib.import_module("numpy")
+            if isinstance(obj, numpy.integer):
+                return int(obj)
+            elif isinstance(obj, numpy.floating):
+                return float(obj)
+            elif isinstance(obj, numpy.ndarray):
+                return obj.tolist()
+        except ModuleNotFoundError:
+            pass
+        return super(NumpyJsonEncoder, self).default(obj)
