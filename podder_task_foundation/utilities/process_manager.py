@@ -14,9 +14,10 @@ class ProcessManager(object):
     def get_process_list(self) -> Dict[str, Optional[Dict]]:
         processes_path = self._root_path.joinpath("processes")
         processes = {}
-        for path in processes_path.iterdir():
-            if path.is_dir() and not path.name.startswith("_"):
-                processes[path.name] = self.get_process_interface(path.name)
+        if processes_path.exists():
+            for path in processes_path.iterdir():
+                if path.is_dir() and not path.name.startswith("_"):
+                    processes[path.name] = self.get_process_interface(path.name)
 
         return processes
 
