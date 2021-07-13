@@ -1,5 +1,4 @@
 from .cli import CLI
-from .command_executor import CommandExecutor
 from .context import Context
 from .mode import MODE
 from .payload import Payload
@@ -8,8 +7,7 @@ from .process_executor import ProcessExecutor
 from .singleton import Singleton
 
 __all__ = [
-    'Context', 'MODE', 'Process', 'Payload', 'Singleton', "CLI", "process_executor",
-    "CommandExecutor"
+    'Context', 'MODE', 'Process', 'Payload', 'Singleton', "CLI", "process_executor", "__version__"
 ]
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'

@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional, Type
 
-from ..plugin import PluginManager
+from ..plugin import ObjectPluginManager
 from .array import Array
 from .csv import CSV
 from .dictionary import Dictionary
@@ -10,7 +10,7 @@ from .lazy_load_file import LazyLoadFile
 from .object import Object
 from .pdf import PDF
 
-_objects = PluginManager().get_object_classes()
+_objects = ObjectPluginManager().get_classes()
 _objects.extend([PDF, Dictionary, Array, CSV])
 
 
@@ -33,4 +33,6 @@ def get_class_from_type(_type: str) -> Optional[Type[Object]]:
     return None
 
 
-__all__ = ["Object", "Dictionary", "Array", "PDF", "LazyLoadFile", "CSV", "factory"]
+__all__ = [
+    "Object", "Dictionary", "Array", "PDF", "LazyLoadFile", "CSV", "factory", "get_class_from_type"
+]

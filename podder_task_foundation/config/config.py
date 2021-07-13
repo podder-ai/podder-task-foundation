@@ -4,12 +4,10 @@ from typing import Any, Optional
 
 from dotenv import load_dotenv
 
-from ..exceptions import DirectoryNotFoundError
 from .config_file import ConfigFile
 
 
 class Config(object):
-    _data = {}
     default_path = Path(os.getenv("CONFIG_ROOT_PATH", "./config/"))
 
     def __getitem__(self, key):
@@ -22,6 +20,7 @@ class Config(object):
         return str(self._data)
 
     def __init__(self, mode: str, path: Optional[Path] = None):
+        self._data = {}
         self._mode = mode
         self._load_dotenv()
         self._path = path or self.default_path

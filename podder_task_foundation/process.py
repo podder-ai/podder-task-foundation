@@ -44,11 +44,15 @@ class Process(object):
             self.store_payload_for_debug(input_, "input")
 
         logger = self.context.logger
+        _sys_stdout = sys.stdout
+        _sys_stderr = sys.stderr
         sys.stdout = StreamToLogger(logger)
         sys.stderr = StreamToLogger(logger, log_level=logging.ERROR)
 
         try:
             self.execute(input_, output, self.context)
+            if self.context.debug_mode:
+                self.store_payload_for_debug(output, "output")
         except ProcessError as exception:
             self.context.logger.critical(exception.message)
             self.context.logger.critical("".join(
@@ -58,9 +62,9 @@ class Process(object):
             raise Exception
         except KeyboardInterrupt as exception:
             raise exception
-
-        if self.context.debug_mode:
-            self.store_payload_for_debug(output, "output")
+        finally:
+            sys.stdout = _sys_stdout
+            sys.stderr = _sys_stderr
 
         return output
 

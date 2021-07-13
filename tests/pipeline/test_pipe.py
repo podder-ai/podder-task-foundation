@@ -24,7 +24,7 @@ def test_pipe_execute_serial():
 
     pipe = Pipe(units=[job1, job2], execute_type=Pipe.Type.SERIAL)
     output = pipe.execute(Payload())
-    assert output
+    assert isinstance(output, Payload)
 
 
 def test_pipe_execute_parallel():
@@ -36,4 +36,5 @@ def test_pipe_execute_parallel():
 
     pipe = Pipe(units=[job1, job2], execute_type=Pipe.Type.PARALLEL)
     output = pipe.execute(Payload())
-    assert output
+    assert isinstance(output, Payload)
+

@@ -5,7 +5,7 @@ from podder_task_foundation import Payload
 
 def test_payload_create():
     payload = Payload()
-    assert payload
+    assert isinstance(payload, Payload)
 
 
 def test_payload_load_json_dictionary():

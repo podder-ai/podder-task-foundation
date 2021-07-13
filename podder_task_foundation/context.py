@@ -38,6 +38,10 @@ class Context(object):
         return self._process_name
 
     @property
+    def processes(self) -> [str]:
+        return self._process_manager.get_process_list()
+
+    @property
     def logger(self) -> BaseLogger:
         return self._logger
 

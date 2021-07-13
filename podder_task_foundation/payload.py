@@ -2,7 +2,7 @@ import copy
 import fnmatch
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Optional, Union
+from typing import Any, Dict, Generator, List, Optional, Set, Union
 
 from .exceptions import WrongDataFormatError
 from .objects import CSV, Array, Dictionary, Object, factory, get_class_from_type
@@ -10,10 +10,13 @@ from .objects import CSV, Array, Dictionary, Object, factory, get_class_from_typ
 
 class Payload(object):
     def __init__(self):
-        self._data = []
+        self._data: [Object] = []
 
     def __getitem__(self, name):
         return self.get(name=name)
+
+    def __len__(self):
+        return len(self._data)
 
     @staticmethod
     def _should_be_target(target_object: [Object],
@@ -99,14 +102,6 @@ class Payload(object):
         data = Array(data=array, name=name)
         self.add(data)
 
-    #    def add_image(self, image: object, name: Optional[str] = None):
-    #        data = Image(data=image, name=name)
-    #        self.add(data)
-
-    #    def add_pdf(self, pdf: Path, name: Optional[str] = None):
-    #        data = PDF(data=pdf, name=name)
-    #        self.add(data)
-
     def all(self,
             name: Optional[str] = None,
             object_type: Union[None, str, List[str]] = None,
@@ -135,6 +130,13 @@ class Payload(object):
             return data.data
 
         return None
+
+    def keys(self) -> Set[str]:
+        keys = []
+        for _object in self._data:
+            keys.append(_object.name)
+
+        return set(keys)
 
     def copy(self) -> object:
         return copy.deepcopy(self)
