@@ -12,12 +12,16 @@ from ..log_setting import LogSetting
 class BaseLogger(object):
     TRACE_LOG_LEVEL = 5
 
-    def __init__(self, mode: str, config: Config, job_id: Optional[str]):
+    def __init__(self,
+                 mode: str,
+                 config: Config,
+                 job_id: Optional[str],
+                 logger: Optional[logging.Logger] = None):
         self._mode = mode
         self._config = config
         self._job_id = job_id
         self._add_trace_level()
-        self._logger = self._get_logger()
+        self._logger = logger or self._get_logger()
         self.setting = LogSetting(mode, config, job_id).load()
 
     @staticmethod
@@ -51,6 +55,9 @@ class BaseLogger(object):
 
     @staticmethod
     def _convert_newline_character(msg: str) -> str:
+        if not isinstance(msg, str):
+            return msg
+
         old_character = '\n'
         new_character = '\\n'
 

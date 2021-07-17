@@ -13,11 +13,11 @@ class ProcessLogger(BaseLogger):
                  config: Config,
                  process_name: str,
                  job_id: Optional[str] = None,
-                 process_id: Optional[str] = None):
-        super().__init__(mode, config, job_id)
+                 process_id: Optional[str] = None,
+                 logger: Optional[logging.Logger] = None):
+        super().__init__(mode=mode, config=config, job_id=job_id, logger=logger)
         self._process_name = process_name
         self._process_id = process_id
-        self._job_id = job_id
         self._start_task()
 
     def _start_task(self):
@@ -26,30 +26,6 @@ class ProcessLogger(BaseLogger):
         color_log_format = self.setting["color_task_log_format"]
         log_level = self.setting["task_log_level"]
         self._configure_logger(log_format, color_log_format, log_level)
-
-    def trace(self, msg, *args, **kwargs):
-        self._format(self.TRACE_LOG_LEVEL, msg, extra=self._create_extra(), *args, **kwargs)
-
-    def debug(self, msg, *args, **kwargs):
-        self._format(logging.DEBUG, msg, extra=self._create_extra(), *args, **kwargs)
-
-    def info(self, msg, *args, **kwargs):
-        self._format(logging.INFO, msg, extra=self._create_extra(), *args, **kwargs)
-
-    def warning(self, msg, *args, **kwargs):
-        self._format(logging.WARNING, msg, extra=self._create_extra(), *args, **kwargs)
-
-    def warn(self, msg, *args, **kwargs):
-        self._format(logging.WARNING, msg, extra=self._create_extra(), *args, **kwargs)
-
-    def error(self, msg, *args, **kwargs):
-        self._format(logging.ERROR, msg, extra=self._create_extra(), *args, **kwargs)
-
-    def exception(self, msg, *args, **kwargs):
-        self._format(logging.ERROR, msg, extra=self._create_extra(), *args, **kwargs)
-
-    def critical(self, msg, *args, **kwargs):
-        self._format(logging.CRITICAL, msg, extra=self._create_extra(), *args, **kwargs)
 
     def _create_extra(self) -> Dict:
         extra = {

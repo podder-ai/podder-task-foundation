@@ -28,4 +28,4 @@ class CLI(object):
         if hasattr(arguments, 'func'):
             arguments.func(arguments)
         else:
-            arguments.print_help()
+            self._parser.print_help()

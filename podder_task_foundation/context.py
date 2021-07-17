@@ -1,6 +1,7 @@
 import importlib
+import logging
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 
 from .config import Config, ProcessConfig, SharedConfig
 from .file import File
@@ -65,9 +66,9 @@ class Context(object):
                  mode: str,
                  process_name: Optional[str] = None,
                  config_path: Optional[Path] = None,
-                 logger: Optional[BaseLogger] = None,
+                 logger: Union[BaseLogger, logging.Logger, None] = None,
                  job_id: Optional[str] = None,
-                 process_id: Optional[Dict[str, Optional[Dict]]] = None,
+                 process_id: Optional[str] = None,
                  debug_mode: bool = False,
                  verbose: bool = False) -> None:
         self._mode = mode
@@ -84,7 +85,10 @@ class Context(object):
         else:
             self._config = self._shared_config
 
-        self._logger = logger or self._get_logger()
+        if isinstance(logger, BaseLogger):
+            self._logger = logger
+        else:
+            self._logger = self._get_logger(logger)
         self._file = File(process_name=process_name,
                           config=self._config,
                           job_id=self._job_id,
@@ -93,12 +97,13 @@ class Context(object):
         self._version = self._get_version()
         self._process_list = self._process_manager.get_process_list()
 
-    def _get_logger(self) -> BaseLogger:
+    def _get_logger(self, logger: Optional[logging.Logger] = None) -> BaseLogger:
         return ProcessLogger(mode=self.mode,
                              config=self._config,
                              process_name=self._process_name,
                              job_id=self._job_id,
-                             process_id=self._process_id)
+                             process_id=self._process_id,
+                             logger=logger)
 
     def _get_version(self) -> str:
         __UNKNOWN = "unknown"
