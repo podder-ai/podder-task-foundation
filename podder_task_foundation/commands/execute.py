@@ -42,7 +42,7 @@ class Execute(Command):
                             nargs='?',
                             default="",
                             type=str,
-                            help='Input files (you can pass file[s] or directory)')
+                            help='Config file path')
         parser.add_argument('-w',
                             '--overwrite',
                             dest='overwrite',

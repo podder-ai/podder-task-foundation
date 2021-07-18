@@ -1,4 +1,6 @@
 import importlib
+import importlib.machinery
+import os
 from pathlib import Path
 from typing import Any, List, Optional, Type
 
@@ -62,5 +64,13 @@ class PluginManager(object):
                 continue
             if hasattr(_class, "type") and _class.type == "plugin_type":
                 classes.append(getattr(plugin_module, class_name))
+
+        directory_plugins = set([str(x.parent) for x in list(directory.glob("*/*.py"))])
+        for plugin_directory in directory_plugins:
+            plugin_module_name = ".".join(plugin_directory.split(os.sep))
+            plugin_module_object = importlib.machinery.SourceFileLoader(
+                plugin_module_name, str(Path(plugin_directory).joinpath("__init__.py")))
+            plugin_module = plugin_module_object.load_module()
+            classes.append(plugin_module.get_class())
 
         return classes
