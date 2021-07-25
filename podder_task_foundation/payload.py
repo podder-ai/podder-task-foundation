@@ -2,7 +2,7 @@ import copy
 import fnmatch
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Optional, Set, Union
+from typing import Any, Dict, List, Optional, Set, Union
 
 from .exceptions import WrongDataFormatError
 from .objects import CSV, Array, Dictionary, Object, factory, get_class_from_type
@@ -147,43 +147,43 @@ class Payload(object):
 
         return
 
-    def __getattr__(self, name: str):
+    def __getattr__(self, _name: str):
         me = self
-        if name.startswith("get_"):
-            _type = name[4:]
+        if _name.startswith("get_"):
+            _type = _name[4:]
             _object = get_class_from_type(_type)
             if _object is not None:
 
-                def _get_object(_name: Optional[str] = None) -> Optional[Object]:
-                    _instance = me.get(name=_name, object_type=_type)
+                def _get_object(name: Optional[str] = None) -> Optional[Object]:
+                    _instance = me.get(name=name, object_type=_type)
                     if _instance is not None:
                         return _instance.data
                     return None
 
                 return _get_object
 
-        if name.startswith("all_"):
-            _type = name[4:]
+        if _name.startswith("all_"):
+            _type = _name[4:]
             _object = get_class_from_type(_type)
             if _object is not None:
 
-                def _all_objects(_name: Optional[str] = None) -> Iterable[Object]:
-                    instances = me.all(name=_name, object_type=_type)
+                def _all_objects(name: Optional[str] = None) -> Iterable[Object]:
+                    instances = me.all(name=name, object_type=_type)
                     for instance in instances:
                         yield instance.data
                     return None
 
                 return _all_objects
 
-        if name.startswith("add_"):
-            _type = name[4:]
+        if _name.startswith("add_"):
+            _type = _name[4:]
             _object = get_class_from_type(_type)
             if _object is not None:
 
-                def _add_object(data: Any, _name: Optional[str] = None) -> Object:
-                    instance = _object(data=data, name=_name)
+                def _add_object(data: Any, name: Optional[str] = None) -> Object:
+                    instance = _object(data=data, name=name)
                     return instance
 
                 return _add_object
 
-        return self.__getattribute__(name)
+        return self.__getattribute__(_name)

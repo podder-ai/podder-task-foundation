@@ -53,7 +53,9 @@ class Config(object):
 
         return data
 
-    def get(self, key: str, default: Any = None) -> Any:
+    def get(self, key: str = None, default: Any = None) -> Any:
+        if key is None:
+            return self._data
         paths = key.split('.')
         data = self._data
         for path in paths:

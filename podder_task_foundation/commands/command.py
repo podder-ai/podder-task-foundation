@@ -1,6 +1,3 @@
-import argparse
-
-
 class Command(object):
     name = ""
     aliases = []

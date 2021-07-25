@@ -3,7 +3,6 @@ from pathlib import Path
 
 from .config import Config
 from .directory_managers import Data, Input, Output, Temporary
-from .exceptions import DirectoryNotFoundError
 from .logging.loggers import BaseLogger
 
 
