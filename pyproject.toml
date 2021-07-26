@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "podder-task-foundation"
-version = "0.2.3"
+version = "0.2.4"
 description = "a framework for developing ML/AL models"
 authors = ["Takaaki Mizuno <takaaki.mizuno@gmail.com>"]
 
