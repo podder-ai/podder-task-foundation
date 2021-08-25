@@ -18,5 +18,5 @@ class JsonConfigParser(BaseConfigParser):
         return False
 
     @classmethod
-    def parse(cls, file: Path, encoding="utf-8") -> dict:
-        return json.loads(file.read_text(), encoding=encoding, object_pairs_hook=OrderedDict)
+    def parse(cls, file: Path, encoding: str = "utf-8") -> dict:
+        return json.loads(file.read_text(encoding=encoding), object_pairs_hook=OrderedDict)
