@@ -1,9 +1,9 @@
 import importlib
 import logging
 from pathlib import Path
-from typing import Dict, Optional, Union
+from typing import Optional, Union
 
-from .config import Config, ProcessConfig, SharedConfig
+from .config import Config, SharedConfig
 from .file import File
 from .logging.loggers import BaseLogger, ProcessLogger
 from .utilities import UID, ProcessManager

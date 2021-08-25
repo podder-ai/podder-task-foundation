@@ -15,5 +15,5 @@ class BaseConfigParser(metaclass=ABCMeta):
 
     @classmethod
     @abstractmethod
-    def parse(cls, file: Path) -> dict:
+    def parse(cls, file: Path, encoding: str = "utf-8") -> dict:
         return {}

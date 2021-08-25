@@ -27,7 +27,8 @@ class Payload(object):
             return False
         if object_types is not None and target_object.type not in object_types:
             return False
-        if extensions is not None and target_object.path is not None and target_object.path.suffix not in extensions:
+        if extensions is not None and target_object.path is not None \
+                and target_object.path.suffix not in extensions:
             return False
 
         return True

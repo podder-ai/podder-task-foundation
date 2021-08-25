@@ -26,5 +26,5 @@ class YamlConfigParser(BaseConfigParser):
         return False
 
     @classmethod
-    def parse(cls, file) -> dict:
-        return yaml.load(file.read_text(), Loader=yaml.SafeLoader)
+    def parse(cls, file: Path, encoding: str = "utf-8") -> dict:
+        return yaml.load(file.read_text(encoding=encoding), Loader=yaml.SafeLoader)
