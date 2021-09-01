@@ -26,7 +26,10 @@ class Array(Object):
         return self._data[item]
 
     def to_json(self) -> str:
-        return json.dumps(self._data, cls=NumpyJsonEncoder, ensure_ascii=False)
+        return json.dumps(self._data,
+                          cls=NumpyJsonEncoder,
+                          ensure_ascii=False,
+                          indent=4)
 
     def save(self, path: Path, encoding: Optional[str] = 'utf-8') -> bool:
         file_type = DataFileLoader().get_file_type(path)
