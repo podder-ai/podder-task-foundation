@@ -36,6 +36,7 @@ def test_csv_get_data_after_get_as_dict():
 
     data = _object.get_data(data_format="dict")
     assert isinstance(data, list)
+    print(type(data[0]))
     assert isinstance(data[0], OrderedDict)
 
     data = _object.data

@@ -35,20 +35,26 @@ class Dictionary(Object):
     def __contains__(self, item):
         return item in self._data.keys()
 
-    def to_json(self) -> str:
-        return json.dumps(self._data, cls=NumpyJsonEncoder, ensure_ascii=False)
+    def to_yaml(self, indent: Optional[int] = None) -> str:
+        return yaml.dump(self._data, indent=indent, allow_unicode=True)
 
-    def save(self, path: Path, encoding: Optional[str] = 'utf-8') -> bool:
+    def to_json(self, indent: Optional[int] = None) -> str:
+        return json.dumps(self._data, cls=NumpyJsonEncoder, ensure_ascii=False, indent=indent)
+
+    def save(self,
+             path: Path,
+             encoding: Optional[str] = 'utf-8',
+             indent: Optional[int] = None) -> bool:
         file_type = DataFileLoader().get_file_type(path)
         if file_type is None:
             return False
 
         if file_type == "yaml":
-            path.write_text(yaml.dump(self._data), encoding=encoding)
+            path.write_text(self.to_yaml(indent=indent), encoding=encoding)
             return True
 
         if file_type == "json":
-            path.write_text(self.to_json(), encoding=encoding)
+            path.write_text(self.to_json(indent=indent), encoding=encoding)
             return True
 
         return False
