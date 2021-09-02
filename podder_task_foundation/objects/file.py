@@ -20,8 +20,13 @@ class File(Object):
     def __str__(self):
         return str(self._data)
 
-    def save(self, path: Path):
+    def save(self,
+             path: Path,
+             encoding: Optional[str] = 'utf-8',
+             indent: Optional[int] = None) -> bool:
         shutil.copy(self._data, path)
+
+        return True
 
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None) -> Object:

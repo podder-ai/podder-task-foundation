@@ -58,6 +58,11 @@ class CLI(object):
                             dest='overwrite',
                             action='store_true',
                             help='Overwrite output file even if the files already exist')
+        parser.add_argument('-p',
+                            '--pretty',
+                            dest='pretty',
+                            action='store_true',
+                            help='Pretty print output ons json output')
         return parser
 
     def execute(self):
@@ -105,6 +110,9 @@ class CLI(object):
                                             debug_mode=context.debug_mode)
 
         data = output.all()
+        indent = None
+        if arguments.pretty:
+            indent = 4
         if output_exists:
             if should_output_to_directory:
                 keys = list(output_paths.keys())
@@ -115,14 +123,14 @@ class CLI(object):
                         context.logger.info("Created directory: {}".format(output_path))
                 for _object in data:
                     file_path = _object.get_file_name(base_path=output_path)
-                    _object.save(path=file_path)
+                    _object.save(path=file_path, indent=indent)
                     if arguments.verbose:
                         context.logger.info("Save output {} to file:{}".format(
                             _object.name, file_path))
             else:
                 keys = list(output_paths.keys())
                 if len(keys) == 1 and keys[0] == self._no_name_key and len(data) == 1:
-                    data[0].save(output_paths[keys[0]])
+                    data[0].save(output_paths[keys[0]], indent=indent)
                     if arguments.verbose:
                         context.logger.info("Save output {} to file:{}".format(
                             data[0].name, output_paths[keys[0]]))
@@ -132,7 +140,7 @@ class CLI(object):
                         output_data = output.get(key)
                         if output_data is None:
                             raise Exception("Output named {} doesn't exist".format(key))
-                        output_data.save(output_paths[key])
+                        output_data.save(output_paths[key], indent=indent)
                         if arguments.verbose:
                             context.logger.info("Save output {} to file:{}".format(
                                 output_data.name, output_paths[key]))

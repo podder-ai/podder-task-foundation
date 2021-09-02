@@ -65,7 +65,10 @@ class Object(object):
             return self._path.suffix
         return ""
 
-    def save(self, path: Path) -> bool:
+    def save(self,
+             path: Path,
+             encoding: Optional[str] = 'utf-8',
+             indent: Optional[int] = None) -> bool:
         with path.open(mode='wb') as file:
             pickle.dump(self._data, file)
 
