@@ -183,6 +183,7 @@ class Payload(object):
 
                 def _add_object(data: Any, name: Optional[str] = None) -> Object:
                     instance = _object(data=data, name=name)
+                    self.add(instance)
                     return instance
 
                 return _add_object

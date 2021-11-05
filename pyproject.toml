@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "podder-task-foundation"
-version = "0.2.4"
-description = "a framework for developing ML/AL models"
+version = "0.2.6"
+description = "a framework for developing prediction pipeline of ML/AL models"
 authors = ["Takaaki Mizuno <takaaki.mizuno@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6.2"
 python-dotenv = "^0.15.0"
 colorlog = "^4.2.1"
 PyYAML = "^5.3.1"
