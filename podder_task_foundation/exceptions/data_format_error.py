@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from .process_error import ProcessError
 
 

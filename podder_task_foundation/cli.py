@@ -2,6 +2,7 @@ import argparse
 import sys
 
 from .commands import load_commands
+from .parameters import Parameters
 
 
 class CLI(object):
@@ -24,8 +25,8 @@ class CLI(object):
                 new_command_arguments.extend(command_arguments)
                 command_arguments = new_command_arguments
 
-        arguments = self._parser.parse_args(command_arguments)
+        arguments, unknown_arguments = self._parser.parse_known_args(command_arguments)
         if hasattr(arguments, 'func'):
-            arguments.func(arguments)
+            arguments.func(arguments, Parameters.from_cli_params(unknown_arguments))
         else:
             self._parser.print_help()

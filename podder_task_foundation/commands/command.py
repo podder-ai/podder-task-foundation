@@ -1,3 +1,8 @@
+from argparse import Namespace
+
+from ..parameters import Parameters
+
+
 class Command(object):
     name = ""
     aliases = []
@@ -20,5 +25,5 @@ class Command(object):
     def set_arguments(self, parser):
         pass
 
-    def handler(self, arguments):
+    def handler(self, arguments: Namespace, unknown_arguments: Parameters, *args):
         pass

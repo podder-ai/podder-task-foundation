@@ -37,4 +37,3 @@ def test_pipe_execute_parallel():
     pipe = Pipe(units=[job1, job2], execute_type=Pipe.Type.PARALLEL)
     output = pipe.execute(Payload())
     assert isinstance(output, Payload)
-

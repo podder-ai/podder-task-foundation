@@ -1,8 +1,10 @@
 import re
+from argparse import Namespace
 from pathlib import Path
 from typing import Dict, Union
 
 from ..mode import MODE
+from ..parameters import Parameters
 from ..process_executor import ProcessExecutor
 from .command import Command
 
@@ -49,7 +51,7 @@ class Execute(Command):
                             action='store_true',
                             help='Overwrite output file even if the files already exist')
 
-    def handler(self, arguments):
+    def handler(self, arguments: Namespace, unknown_arguments: Parameters, *args):
         process_executor = ProcessExecutor(mode=MODE.CONSOLE,
                                            config_path=arguments.config,
                                            verbose=arguments.verbose,

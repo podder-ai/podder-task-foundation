@@ -6,6 +6,7 @@ from typing import Dict, Optional, Tuple
 from .config import Config
 from .context import Context
 from .mode import MODE
+from .parameters import Parameters
 from .payload import Payload
 from .pipeline import Pipeline
 from .utilities import Strings
@@ -38,7 +39,10 @@ class ProcessExecutor(object):
     def no_name_key(self) -> str:
         return self._no_name_key
 
-    def execute(self, process_name: Optional[str], input_payload: Payload) -> Payload:
+    def execute(self,
+                process_name: Optional[str],
+                input_payload: Payload,
+                parameters: Parameters = None) -> Payload:
 
         start_time = time.time()
 
@@ -49,9 +53,11 @@ class ProcessExecutor(object):
             self._context.logger.info("Start Process: Job ID: {}".format(self._context.job_id))
 
         if process_name is not None:
-            output = self._execute_single_process(name=process_name, _input=input_payload)
+            output = self._execute_single_process(name=process_name,
+                                                  _input=input_payload,
+                                                  parameters=parameters)
         else:
-            output = self._execute_pipeline(_input=input_payload)
+            output = self._execute_pipeline(_input=input_payload, parameters=parameters)
 
         process_time = str(round((time.time() - start_time), 3))
         if self._context.verbose:
@@ -60,7 +66,10 @@ class ProcessExecutor(object):
 
         return output
 
-    def _execute_single_process(self, name: str, _input: Payload) -> Payload:
+    def _execute_single_process(self,
+                                name: str,
+                                _input: Payload,
+                                parameters: Parameters = None) -> Payload:
         context = Context(mode=self._context.mode,
                           process_name=name,
                           config_path=self._context.config.path,
@@ -71,7 +80,7 @@ class ProcessExecutor(object):
         output: Payload = process.handle(_input)
         return output
 
-    def _execute_pipeline(self, _input: Payload) -> Payload:
+    def _execute_pipeline(self, _input: Payload, parameters: Parameters = None) -> Payload:
         context = Context(mode=self._context.mode,
                           config_path=self._context.config.path,
                           job_id=self._context.job_id,

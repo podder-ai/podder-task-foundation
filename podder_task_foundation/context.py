@@ -6,6 +6,7 @@ from typing import Optional, Union
 from .config import Config, SharedConfig
 from .file import File
 from .logging.loggers import BaseLogger, ProcessLogger
+from .parameters import Parameters
 from .utilities import UID, ProcessManager
 
 
@@ -62,6 +63,10 @@ class Context(object):
     def version(self) -> str:
         return self._version
 
+    @property
+    def parameters(self) -> Parameters:
+        return self._parameters
+
     def __init__(self,
                  mode: str,
                  process_name: Optional[str] = None,
@@ -70,7 +75,8 @@ class Context(object):
                  job_id: Optional[str] = None,
                  process_id: Optional[str] = None,
                  debug_mode: bool = False,
-                 verbose: bool = False) -> None:
+                 verbose: bool = False,
+                 parameters: Parameters = None) -> None:
         self._mode = mode
         self._debug_mode = debug_mode
         self._verbose = verbose
@@ -79,6 +85,10 @@ class Context(object):
         self._process_name = process_name
         self._shared_config = SharedConfig(self._mode, path=config_path)
         self._process_manager = ProcessManager(self.mode, self._shared_config, self.debug_mode)
+        if parameters is None:
+            self._parameters = Parameters({})
+        else:
+            self._parameters = parameters
 
         if self._process_name is not None:
             self._config = self._process_manager.get_process_config(self._process_name)
