@@ -73,10 +73,9 @@ class Execute(Command):
         _input = process_executor.build_payload_from_files(_input_files)
 
         process_name = arguments.process_name
-        output = process_executor.execute(
-            process_name,
-            input_payload=_input,
-        )
+        output = process_executor.execute(process_name,
+                                          input_payload=_input,
+                                          parameters=unknown_arguments)
 
         data = output.all()
         if output_exists:
