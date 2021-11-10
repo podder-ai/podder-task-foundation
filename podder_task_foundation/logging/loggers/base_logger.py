@@ -54,8 +54,6 @@ class BaseLogger(object):
         self._format(logging.CRITICAL, msg, extra=self._create_extra(), *args, **kwargs)
 
     def add_handler(self, handler: logging.StreamHandler):
-        if self._logger.hasHandlers():
-            self._logger.handlers.clear()
         self._logger.addHandler(handler)
         
     @staticmethod
