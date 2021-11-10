@@ -16,5 +16,5 @@ def test_logger_add_handler():
     assert context.logger
     before_handler_number = len(context.logger._logger.handlers)
     null_handler = logging.NullHandler()
-    assert context.logger.add_handler(null_handler)
+    context.logger.add_handler(null_handler)
     assert len(context.logger._logger.handlers) == before_handler_number + 1
