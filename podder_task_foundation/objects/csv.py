@@ -61,7 +61,10 @@ class CSV(LazyLoadFile):
 
         return data
 
-    def save(self, path: Path, encoding: Optional[str] = 'utf-8') -> bool:
+    def save(self,
+             path: Path,
+             encoding: Optional[str] = 'utf-8',
+             indent: Optional[int] = None) -> bool:
         if self._row_type == "dict":
             return self._save_dict(path, encoding)
         else:

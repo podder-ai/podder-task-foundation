@@ -25,7 +25,11 @@ class LazyLoadFile(Object):
     def clear(self):
         self._data = ""
 
-    def save(self, path: Path) -> bool:
+    def save(self,
+             path: Path,
+             encoding: Optional[str] = 'utf-8',
+             indent: Optional[int] = None) -> bool:
+
         shutil.copy(self._data, path)
         return True
 
