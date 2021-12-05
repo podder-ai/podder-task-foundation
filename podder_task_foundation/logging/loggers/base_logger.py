@@ -53,6 +53,9 @@ class BaseLogger(object):
     def critical(self, msg, *args, **kwargs):
         self._format(logging.CRITICAL, msg, extra=self._create_extra(), *args, **kwargs)
 
+    def add_handler(self, handler: logging.StreamHandler):
+        self._logger.addHandler(handler)
+        
     @staticmethod
     def _convert_newline_character(msg: str) -> str:
         if not isinstance(msg, str):
