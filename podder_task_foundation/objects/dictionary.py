@@ -24,22 +24,22 @@ class Dictionary(Object):
         return self.to_json()
 
     def __getitem__(self, item):
-        return self._data[item]
+        return self.data[item]
 
     def __getattr__(self, item):
-        if item not in self._data.keys():
+        if item not in self.data.keys():
             raise AttributeError("'{}' object has no attribute '{}'".format(
                 type(self).__name__, item))
-        return self._data[item]
+        return self.data[item]
 
     def __contains__(self, item):
-        return item in self._data.keys()
+        return item in self.data.keys()
 
     def to_yaml(self, indent: Optional[int] = None) -> str:
-        return yaml.dump(self._data, indent=indent, allow_unicode=True)
+        return yaml.dump(self.data, indent=indent, allow_unicode=True)
 
     def to_json(self, indent: Optional[int] = None) -> str:
-        return json.dumps(self._data, cls=NumpyJsonEncoder, ensure_ascii=False, indent=indent)
+        return json.dumps(self.data, cls=NumpyJsonEncoder, ensure_ascii=False, indent=indent)
 
     def save(self,
              path: Path,

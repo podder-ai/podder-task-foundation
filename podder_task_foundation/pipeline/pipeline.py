@@ -65,6 +65,7 @@ class Pipeline(object):
                           process_name=name,
                           config_path=self._context.shared_config.path,
                           job_id=self._context.job_id,
+                          debug_mode=self._context.debug_mode,
                           logger=logger)
         process_module = importlib.import_module('processes.{}.process'.format(name))
         process = process_module.Process(mode=self._context.mode, context=context)

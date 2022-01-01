@@ -11,6 +11,20 @@ from .utilities import UID, ProcessManager
 
 
 class Context(object):
+    @classmethod
+    def copy(cls, process_name: Optional[str], parameters: Optional[Parameters],
+             original: "Context") -> "Context":
+
+        return cls(mode=original.mode,
+                   process_name=process_name,
+                   config_path=original.config_path,
+                   logger=original.logger,
+                   job_id=original.job_id,
+                   process_id=None,
+                   debug_mode=original.debug_mode,
+                   verbose=original.verbose,
+                   parameters=parameters)
+
     @property
     def config(self) -> Config:
         return self._config
@@ -67,6 +81,10 @@ class Context(object):
     def parameters(self) -> Parameters:
         return self._parameters
 
+    @property
+    def config_path(self) -> Optional[Path]:
+        return self._config_path
+
     def __init__(self,
                  mode: str,
                  process_name: Optional[str] = None,
@@ -81,8 +99,9 @@ class Context(object):
         self._debug_mode = debug_mode
         self._verbose = verbose
         self._job_id = job_id or UID.generate()
-        self._process_id = process_id
+        self._process_id = process_id or UID.generate()
         self._process_name = process_name
+        self._config_path = config_path
         self._shared_config = SharedConfig(self._mode, path=config_path)
         self._process_manager = ProcessManager(self.mode, self._shared_config, self.debug_mode)
         if parameters is None:

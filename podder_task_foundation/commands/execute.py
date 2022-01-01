@@ -78,6 +78,7 @@ class Execute(Command):
         _input = process_executor.build_payload_from_files(_input_files)
 
         process_name = arguments.process_name
+        unknown_arguments.extend(vars(arguments))
         output = process_executor.execute(process_name,
                                           input_payload=_input,
                                           parameters=unknown_arguments)
@@ -148,12 +149,7 @@ class Execute(Command):
         for output_name in output_names:
             name, output_path = self._parse_name_and_file(output_name, no_name_key=no_name_key)
             if output_path.exists():
-                if output_path.is_dir():
-                    raise Exception(
-                        "Output path {} is a directory. you cannot specify directory when you "
-                        "set multiple outputs "
-                        .format(output_path))
-                elif not overwrite:
+                if not overwrite:
                     raise Exception("Output file {} already exists.".format(output_path))
 
             if name == no_name_key:

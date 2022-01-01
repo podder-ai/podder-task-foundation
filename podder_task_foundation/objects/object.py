@@ -97,7 +97,7 @@ class Object(object):
         return path
 
     @classmethod
-    def load(cls, path: Path, name: Optional[str] = None):
+    def load(cls, path: Path, name: Optional[str] = None) -> "Object":
         with path.open(mode='rb') as file:
             data = pickle.load(file)
             return Object(data=data, name=cls._get_name(path, name))
