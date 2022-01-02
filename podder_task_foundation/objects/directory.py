@@ -1,4 +1,5 @@
 import shutil
+import tempfile
 from pathlib import Path
 from typing import Optional
 
@@ -10,7 +11,15 @@ class Directory(Object):
     type = "directory"
 
     def __init__(self, data: Optional[Path] = None, name: Optional[str] = None):
+        if data is None:
+            self._temporary_directory_object = tempfile.TemporaryDirectory(prefix=name)
+            data = Path(self._temporary_directory_object.name)
+
         super().__init__(data=data, name=name, path=data)
+
+    def __del__(self):
+        if self._temporary_directory_object is not None:
+            self._temporary_directory_object.cleanup()
 
     def __repr__(self):
         return str(self._data)
@@ -23,6 +32,14 @@ class Directory(Object):
 
     def add_file(self, _object: Object):
         _object.save(self.path.joinpath(_object.name))
+
+    def save(self,
+             path: Path,
+             encoding: Optional[str] = 'utf-8',
+             indent: Optional[int] = None) -> bool:
+        shutil.copytree(self._path, path)
+
+        return True
 
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None) -> "Directory":

@@ -36,10 +36,7 @@ def test_payload_load_pdf():
 
 def test_payload_load_directory():
     payload = Payload()
-    payload.add_directory(Path(__file__).parent.joinpath("data"))
+    payload.add_directory(Path(__file__).parent.joinpath("data"), name="directory")
 
-    objects = payload.all()
-    assert len(objects) == 6
-    assert objects[0].type == "array"
-    assert objects[0].name == "array_01.json"
-    assert objects[0].extension == ".json"
+    directory_data = payload.get(object_type="directory")
+    assert directory_data
