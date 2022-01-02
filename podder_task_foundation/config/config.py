@@ -4,10 +4,12 @@ from typing import Any, Optional
 
 from dotenv import load_dotenv
 
+from ..data_bag import DataBag
 from .config_file import ConfigFile
 
 
-class Config(object):
+class Config(DataBag):
+    _IS_IMMUTABLE = True
     default_path = Path(os.getenv("CONFIG_ROOT_PATH", "./config/"))
 
     def __getitem__(self, key):
@@ -20,7 +22,7 @@ class Config(object):
         return str(self._data)
 
     def __init__(self, mode: str, path: Optional[Path] = None):
-        self._data = {}
+        super().__init__()
         self._mode = mode
         self._load_dotenv()
         self._path = path or self.default_path
@@ -50,19 +52,6 @@ class Config(object):
                 if values is None:
                     continue
                 data[config.stem] = values
-
-        return data
-
-    def get(self, key: str = None, default: Any = None) -> Any:
-        if key is None:
-            return self._data
-        paths = key.split('.')
-        data = self._data
-        for path in paths:
-            if path in data:
-                data = data[path]
-            else:
-                return default
 
         return data
 

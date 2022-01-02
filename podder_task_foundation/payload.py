@@ -54,8 +54,8 @@ class Payload(object):
 
         return None
 
-    def add_directory(self, directory: Path, name: Optional[str] = None) -> bool:
-        if not directory.is_dir():
+    def add_directory(self, directory: Optional[Path] = None, name: Optional[str] = None) -> bool:
+        if directory is not None and not directory.is_dir():
             return False
 
         directory = Directory(data=directory, name=name)
@@ -135,7 +135,7 @@ class Payload(object):
 
         return set(keys)
 
-    def copy(self) -> object:
+    def copy(self) -> "Payload":
         return copy.deepcopy(self)
 
     def merge(self, target):

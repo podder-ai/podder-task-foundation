@@ -1,9 +1,11 @@
+import copy
 import importlib
 import logging
 from pathlib import Path
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 from .config import Config, SharedConfig
+from .data_bag import DataBag
 from .file import File
 from .logging.loggers import BaseLogger, ProcessLogger
 from .parameters import Parameters
@@ -23,7 +25,8 @@ class Context(object):
                    process_id=None,
                    debug_mode=original.debug_mode,
                    verbose=original.verbose,
-                   parameters=parameters)
+                   parameters=parameters,
+                   custom_data=copy.deepcopy(original.custom_data.get()))
 
     @property
     def config(self) -> Config:
@@ -85,6 +88,10 @@ class Context(object):
     def config_path(self) -> Optional[Path]:
         return self._config_path
 
+    @property
+    def custom_data(self) -> DataBag:
+        return self._custom_data
+
     def __init__(self,
                  mode: str,
                  process_name: Optional[str] = None,
@@ -94,7 +101,8 @@ class Context(object):
                  process_id: Optional[str] = None,
                  debug_mode: bool = False,
                  verbose: bool = False,
-                 parameters: Parameters = None) -> None:
+                 parameters: Parameters = None,
+                 custom_data: Optional[Dict] = None) -> None:
         self._mode = mode
         self._debug_mode = debug_mode
         self._verbose = verbose
@@ -104,6 +112,8 @@ class Context(object):
         self._config_path = config_path
         self._shared_config = SharedConfig(self._mode, path=config_path)
         self._process_manager = ProcessManager(self.mode, self._shared_config, self.debug_mode)
+        self._custom_data = DataBag(custom_data)
+
         if parameters is None:
             self._parameters = Parameters({})
         else:

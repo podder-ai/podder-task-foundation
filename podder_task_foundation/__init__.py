@@ -1,5 +1,6 @@
 from .cli import CLI
 from .context import Context
+from .data_bag import DataBag
 from .mode import MODE
 from .parameters import Parameters
 from .payload import Payload
@@ -9,8 +10,8 @@ from .process_executor import ProcessExecutor
 from .singleton import Singleton
 
 __all__ = [
-    'Context', 'MODE', 'Process', 'Payload', 'Singleton', "CLI", "Pipeline", "ProcessExecutor",
-    "Parameters", "__version__"
+    'Context', 'DataBag', 'MODE', 'Process', 'Payload', 'Singleton', "CLI", "Pipeline",
+    "ProcessExecutor", "Parameters", "__version__"
 ]
 
 __version__ = '0.2.9'
