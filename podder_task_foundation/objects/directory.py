@@ -37,7 +37,15 @@ class Directory(Object):
              path: Path,
              encoding: Optional[str] = 'utf-8',
              indent: Optional[int] = None) -> bool:
-        shutil.copytree(self._path, path)
+        shutil.copytree(self.path, path)
+
+        return True
+
+    def copy(self, path: Path) -> bool:
+        if self.path is None:
+            return self.save(path)
+        else:
+            shutil.copytree(self.path, path)
 
         return True
 

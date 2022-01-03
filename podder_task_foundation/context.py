@@ -14,13 +14,18 @@ from .utilities import UID, ProcessManager
 
 class Context(object):
     @classmethod
-    def copy(cls, process_name: Optional[str], parameters: Optional[Parameters],
-             original: "Context") -> "Context":
+    def copy(
+        cls,
+        process_name: Optional[str],
+        parameters: Optional[Parameters],
+        logger: Union[BaseLogger, logging.Logger, None],
+        original: "Context",
+    ) -> "Context":
 
         return cls(mode=original.mode,
                    process_name=process_name,
                    config_path=original.config_path,
-                   logger=original.logger,
+                   logger=logger,
                    job_id=original.job_id,
                    process_id=None,
                    debug_mode=original.debug_mode,

@@ -72,7 +72,10 @@ class ProcessExecutor(object):
                                 name: str,
                                 _input: Payload,
                                 parameters: Parameters = None) -> Payload:
-        context = Context.copy(process_name=name, parameters=parameters, original=self._context)
+        context = Context.copy(process_name=name,
+                               parameters=parameters,
+                               logger=self.context.logger,
+                               original=self.context)
         process_module = importlib.import_module('processes.{}.process'.format(name))
         process = process_module.Process(mode=self._context.mode, context=context)
 
@@ -80,7 +83,10 @@ class ProcessExecutor(object):
         return output
 
     def _execute_pipeline(self, _input: Payload, parameters: Parameters = None) -> Payload:
-        context = Context.copy(process_name=None, parameters=parameters, original=self._context)
+        context = Context.copy(process_name=None,
+                               parameters=parameters,
+                               logger=self.context.logger,
+                               original=self.context)
         blueprint = context.config.get("pipeline", default=None)
         pipeline = Pipeline(blueprint=blueprint, context=context)
 
