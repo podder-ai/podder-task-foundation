@@ -20,6 +20,9 @@ def test_process_context_opy():
                       process_name="test",
                       config_path=Path(__file__).parent.joinpath("data", "config"))
 
-    copied_context = Context.copy(process_name="test2", parameters=None, original=context)
+    copied_context = Context.copy(process_name="test2",
+                                  parameters=None,
+                                  logger=None,
+                                  original=context)
 
     assert copied_context
