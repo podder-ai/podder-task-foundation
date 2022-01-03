@@ -55,7 +55,7 @@ class BaseLogger(object):
 
     def add_handler(self, handler: logging.StreamHandler):
         self._logger.addHandler(handler)
-        
+
     @staticmethod
     def _convert_newline_character(msg: str) -> str:
         if not isinstance(msg, str):

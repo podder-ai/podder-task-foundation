@@ -1,5 +1,6 @@
 import logging
 import sys
+import time
 import traceback
 from typing import Optional
 
@@ -25,14 +26,13 @@ class Process(object):
             full_name = module + '.' + self.__class__.__name__
 
         elements = full_name.split(".")
-        if len(elements) < 2:
+        if len(elements) < 3:
             raise ProcessError(
                 message="Your Process class is placed on different place {}.".format(full_name),
                 detail="It should placed on ./processes/[your task name]/process.py",
                 how_to_solve="Move your Process class to the right place",
             )
-
-        return elements[-2]
+        return elements[-3]
 
     def initialize(self, context: Context) -> None:
         pass
@@ -40,14 +40,17 @@ class Process(object):
     def handle(self, input_: Optional[Payload] = None) -> Payload:
         output = Payload()
 
-        if self.context.debug_mode:
-            self.store_payload_for_debug(input_, "input")
-
         logger = self.context.logger
         _sys_stdout = sys.stdout
         _sys_stderr = sys.stderr
         sys.stdout = StreamToLogger(logger)
         sys.stderr = StreamToLogger(logger, log_level=logging.ERROR)
+
+        start_time = time.time()
+
+        if self.context.debug_mode:
+            self.store_payload_for_debug(input_, "input")
+            self.context.logger.debug("Start Process: {}".format(self._get_process_name()))
 
         try:
             self.execute(input_, output, self.context)
@@ -65,6 +68,12 @@ class Process(object):
         finally:
             sys.stdout = _sys_stdout
             sys.stderr = _sys_stderr
+
+        if self.context.debug_mode:
+            finish_time = time.time()
+            total_execution_time = int(finish_time - start_time)
+            self.context.logger.debug("Finish Process: {} ({} sec)".format(
+                self._get_process_name(), total_execution_time))
 
         return output
 

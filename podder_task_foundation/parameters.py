@@ -18,6 +18,16 @@ class Parameters(object):
 
         raise KeyError
 
+    def __str__(self):
+        return str(self._parameters)
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __iter__(self):
+        for key in self._parameters.keys():
+            yield key, self._parameters[key]
+
     def get(self, key: str, default: Any = None):
         if key in self._parameters:
             return copy.deepcopy(self._parameters[key])
@@ -29,6 +39,9 @@ class Parameters(object):
 
     def all(self) -> dict:
         return copy.deepcopy(self._parameters)
+
+    def extend(self, additional_parameters: dict):
+        self._parameters.update(additional_parameters)
 
     @classmethod
     def from_cli_params(cls, parameters: List[str]) -> "Parameters":
