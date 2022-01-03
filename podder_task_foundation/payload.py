@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Union
 
 from .exceptions import WrongDataFormatError
-from .objects import CSV, Array, Dictionary, Object, factory, get_class_from_type
+from .objects import CSV, Array, Dictionary, Directory, Object, factory, get_class_from_type
 
 
 class Payload(object):
@@ -28,7 +28,7 @@ class Payload(object):
         if object_types is not None and target_object.type not in object_types:
             return False
         if extensions is not None and target_object.path is not None \
-                and target_object.path.suffix not in extensions:
+            and target_object.path.suffix not in extensions:
             return False
 
         return True
@@ -54,16 +54,12 @@ class Payload(object):
 
         return None
 
-    def add_directory(self, directory: Path) -> bool:
-        if not directory.is_dir():
+    def add_directory(self, directory: Optional[Path] = None, name: Optional[str] = None) -> bool:
+        if directory is not None and not directory.is_dir():
             return False
-        files = sorted(list(directory.glob("*")), key=lambda x: x.name)
 
-        for file in files:
-            if file.is_dir() or file.name[0] == ".":
-                continue
-            self.add_file(file, name=file.name)
-
+        directory = Directory(data=directory, name=name)
+        self.add(directory, name=name)
         return True
 
     def add_file(self, file: Path, name: Optional[str] = None) -> bool:
@@ -139,7 +135,7 @@ class Payload(object):
 
         return set(keys)
 
-    def copy(self) -> object:
+    def copy(self) -> "Payload":
         return copy.deepcopy(self)
 
     def merge(self, target):

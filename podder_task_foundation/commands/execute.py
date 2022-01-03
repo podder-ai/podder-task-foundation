@@ -1,4 +1,5 @@
 import re
+import shutil
 from argparse import Namespace
 from pathlib import Path
 from typing import Dict, Union
@@ -60,7 +61,8 @@ class Execute(Command):
         process_executor = ProcessExecutor(mode=MODE.CONSOLE,
                                            config_path=arguments.config,
                                            verbose=arguments.verbose,
-                                           debug_mode=arguments.debug)
+                                           debug_mode=arguments.debug,
+                                           parameters=unknown_arguments)
 
         output_files = arguments.output
         output_exists, should_output_to_directory, output_paths = self.check_output_type(
@@ -78,6 +80,7 @@ class Execute(Command):
         _input = process_executor.build_payload_from_files(_input_files)
 
         process_name = arguments.process_name
+        unknown_arguments.extend(vars(arguments))
         output = process_executor.execute(process_name,
                                           input_payload=_input,
                                           parameters=unknown_arguments)
@@ -96,7 +99,12 @@ class Execute(Command):
                         process_executor.context.logger.info(
                             "Created directory: {}".format(output_path))
                 for _object in data:
-                    file_path = _object.get_file_name(base_path=output_path)
+                    file_path: Path = _object.get_file_name(base_path=output_path)
+                    if file_path.exists():
+                        if file_path.is_dir():
+                            shutil.rmtree(file_path)
+                        else:
+                            file_path.unlink()
                     _object.save(path=file_path, indent=indent)
                     if arguments.verbose:
                         process_executor.context.logger.info("Save output {} to file:{}".format(
@@ -104,7 +112,13 @@ class Execute(Command):
             else:
                 keys = list(output_paths.keys())
                 if len(keys) == 1 and keys[0] == process_executor.no_name_key and len(data) == 1:
-                    data[0].save(output_paths[keys[0]], indent=indent)
+                    file_path = output_paths[keys[0]]
+                    if file_path.exists():
+                        if file_path.is_dir():
+                            shutil.rmtree(file_path)
+                        else:
+                            file_path.unlink()
+                    data[0].save(file_path, indent=indent)
                     if arguments.verbose:
                         process_executor.context.logger.info("Save output {} to file:{}".format(
                             data[0].name, output_paths[keys[0]]))
@@ -114,10 +128,16 @@ class Execute(Command):
                         output_data = output.get(key)
                         if output_data is None:
                             raise Exception("Output named {} doesn't exist".format(key))
-                        output_data.save(output_paths[key], indent=indent)
+                        file_path = output_paths[key]
+                        if file_path.exists():
+                            if file_path.is_dir():
+                                shutil.rmtree(file_path)
+                            else:
+                                file_path.unlink()
+                        output_data.save(file_path, indent=indent)
                         if arguments.verbose:
                             process_executor.context.logger.info("Save output {} to file:{}".format(
-                                output_data.name, output_paths[key]))
+                                output_data.name, file_path))
 
         else:
             if arguments.verbose:
@@ -148,12 +168,7 @@ class Execute(Command):
         for output_name in output_names:
             name, output_path = self._parse_name_and_file(output_name, no_name_key=no_name_key)
             if output_path.exists():
-                if output_path.is_dir():
-                    raise Exception(
-                        "Output path {} is a directory. you cannot specify directory when you "
-                        "set multiple outputs "
-                        .format(output_path))
-                elif not overwrite:
+                if not overwrite:
                     raise Exception("Output file {} already exists.".format(output_path))
 
             if name == no_name_key:

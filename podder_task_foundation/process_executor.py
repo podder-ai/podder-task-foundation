@@ -19,7 +19,8 @@ class ProcessExecutor(object):
                  config_path: Optional[str],
                  mode: str = MODE.CONSOLE,
                  verbose: bool = False,
-                 debug_mode: bool = False):
+                 debug_mode: bool = False,
+                 parameters: Optional[Parameters] = None):
         self._no_name_key = self._NO_NAME_PREFIX + Strings().random_string(10)
         if config_path is None or config_path == "":
             config_path_object = Path(Config.default_path)
@@ -29,7 +30,8 @@ class ProcessExecutor(object):
         self._context = Context(mode=mode,
                                 config_path=config_path_object,
                                 debug_mode=debug_mode,
-                                verbose=verbose)
+                                verbose=verbose,
+                                parameters=parameters)
 
     @property
     def context(self) -> Context:
@@ -70,10 +72,10 @@ class ProcessExecutor(object):
                                 name: str,
                                 _input: Payload,
                                 parameters: Parameters = None) -> Payload:
-        context = Context(mode=self._context.mode,
-                          process_name=name,
-                          config_path=self._context.config.path,
-                          debug_mode=self._context.debug_mode)
+        context = Context.copy(process_name=name,
+                               parameters=parameters,
+                               logger=self.context.logger,
+                               original=self.context)
         process_module = importlib.import_module('processes.{}.process'.format(name))
         process = process_module.Process(mode=self._context.mode, context=context)
 
@@ -81,10 +83,10 @@ class ProcessExecutor(object):
         return output
 
     def _execute_pipeline(self, _input: Payload, parameters: Parameters = None) -> Payload:
-        context = Context(mode=self._context.mode,
-                          config_path=self._context.config.path,
-                          job_id=self._context.job_id,
-                          debug_mode=self._context.debug_mode)
+        context = Context.copy(process_name=None,
+                               parameters=parameters,
+                               logger=self.context.logger,
+                               original=self.context)
         blueprint = context.config.get("pipeline", default=None)
         pipeline = Pipeline(blueprint=blueprint, context=context)
 
