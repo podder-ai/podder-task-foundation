@@ -5,13 +5,13 @@ description = "a framework for developing prediction pipeline of ML/AL models"
 authors = ["Takaaki Mizuno <takaaki.mizuno@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.6.2"
+python = "^3.7"
 python-dotenv = "^0.15.0"
 colorlog = "^4.2.1"
 PyYAML = "^5.3.1"
 toml = "^0.10.1"
 ulid-py = "^1.1.0"
-importlib-metadata = { version = "^3.1.1", markers = "python_version < '3.8'" }
+importlib-metadata = { version = "^4.10.0", markers = "python_version < '3.8'" }
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

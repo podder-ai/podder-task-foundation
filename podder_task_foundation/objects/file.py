@@ -1,4 +1,5 @@
 import shutil
+import tempfile
 from pathlib import Path
 from typing import Optional
 
@@ -10,7 +11,14 @@ class File(Object):
     type = "file"
 
     def __init__(self, data: Optional[Path] = None, name: Optional[str] = None):
-        super().__init__(data=data, name=name, path=data)
+        self._temporary_directory_object = tempfile.TemporaryDirectory(prefix=name)
+        copied_file_path = Path(self._temporary_directory_object.name).joinpath(data.name)
+        shutil.copy(data, copied_file_path)
+        super().__init__(data=copied_file_path, name=name, path=copied_file_path)
+
+    def __del__(self):
+        if self._temporary_directory_object is not None:
+            self._temporary_directory_object.cleanup()
 
     def __repr__(self):
         return str(self._data)
