@@ -2,10 +2,10 @@ import csv
 from pathlib import Path
 from typing import Any, List, Optional
 
-from .lazy_load_file import LazyLoadFile
+from .object import Object
 
 
-class CSV(LazyLoadFile):
+class CSV(Object):
     supported_extensions = [".csv"]
     type = "array"
     default_extension = ".csv"

@@ -16,7 +16,8 @@ class Object(object):
                  data: Any = None,
                  path: Union[None, Path, str] = None,
                  name: Optional[str] = None):
-        self._data = copy.deepcopy(data)
+
+        self._data = copy.deepcopy(data) if data is not None else None
 
         if type(path) == str and path != "":
             self._path = Path(path)
@@ -38,6 +39,9 @@ class Object(object):
     def __str__(self):
         return self.to_str()
 
+    def _lazy_load(self):
+        pass
+
     def to_repr(self) -> str:
         return "<Type: {}>".format(self.type)
 
@@ -49,6 +53,8 @@ class Object(object):
 
     @property
     def data(self) -> Any:
+        if self._data is None and self._path is not None:
+            self._lazy_load()
         return self._data
 
     @property
@@ -69,10 +75,22 @@ class Object(object):
              path: Path,
              encoding: Optional[str] = 'utf-8',
              indent: Optional[int] = None) -> bool:
+
+        if self.path is not None:
+            shutil.copy(self.path, path)
+            return True
+
+        if self._data is None:
+            path.touch()
+            return True
+
         with path.open(mode='wb', encoding=encoding) as file:
             pickle.dump(self._data, file)
 
         return True
+
+    def clear(self):
+        self._data = None
 
     def copy(self, path: Path) -> bool:
         if self.path is None:
@@ -98,9 +116,7 @@ class Object(object):
 
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None) -> "Object":
-        with path.open(mode='rb') as file:
-            data = pickle.load(file)
-            return Object(data=data, name=cls._get_name(path, name))
+        return cls(path=path, name=cls._get_name(path, name))
 
     @classmethod
     def is_supported_file(cls, path: Path) -> bool:

@@ -24,6 +24,8 @@ class DataFileLoader(object):
         ".yml": "yaml",
         ".toml": "toml",
         ".csv": "csv",
+        ".txt": "text",
+        ".text": "text"
     }
 
     def __init__(self):
@@ -46,6 +48,8 @@ class DataFileLoader(object):
                 reader = csv.reader(file_handler)
                 for row in reader:
                     data.append(row)
+        elif file_format == "text":
+            data = path.read_text(encoding=encoding)
 
         return data
 
