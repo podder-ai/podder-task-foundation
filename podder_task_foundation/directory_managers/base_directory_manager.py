@@ -3,6 +3,7 @@ from typing import Any, Optional
 
 from ..exceptions import DirectoryNotFoundError, ProcessError
 from ..logging.loggers import BaseLogger
+from ..objects import Object, factory
 
 
 class BaseDirectoryManager(object):
@@ -12,7 +13,7 @@ class BaseDirectoryManager(object):
                  process_name: Optional[str],
                  base_path: str,
                  job_id: str,
-                 logger: BaseLogger,
+                 logger: Optional[BaseLogger],
                  debug_mode: bool = False):
         self._process_name = process_name
         if base_path is None:
@@ -41,9 +42,16 @@ class BaseDirectoryManager(object):
                 " or set proper path on config file",
                 reference_url="")
 
-    def get(self, name: str) -> Path:
+    def get(self, file_name: str) -> Path:
         self._check_base_path()
-        return self._base_path.joinpath(name)
+        return self._base_path.joinpath(file_name)
+
+    def get_object(self, name: str) -> Optional[Object]:
+        path = self.get(name)
+        if not path.exists():
+            return None
+
+        return factory(path)
 
     def directory(self) -> Path:
         return self._base_path
@@ -59,3 +67,7 @@ class BaseDirectoryManager(object):
         path = self.get(name)
         path.write_text(data)
         return path
+
+    def save_from_object(self, _object: Object, file_name: str):
+        path = self.get(file_name)
+        _object.save(path)
