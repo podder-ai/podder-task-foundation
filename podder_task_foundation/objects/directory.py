@@ -11,6 +11,7 @@ class Directory(Object):
     type = "directory"
 
     def __init__(self, data: Optional[Path] = None, name: Optional[str] = None):
+        self._temporary_directory_object = None
         if data is None:
             self._temporary_directory_object = tempfile.TemporaryDirectory(prefix=name)
             data = Path(self._temporary_directory_object.name)

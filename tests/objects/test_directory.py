@@ -35,3 +35,9 @@ def test_directory_create_with_name(data_path):
     path = _object.path
     assert path.exists()
     assert path.is_dir()
+
+
+def test_directory_create_with_directory_and_destroy(data_path):
+    _object = Directory(data=data_path)
+    assert _object.type == "directory"
+    del _object

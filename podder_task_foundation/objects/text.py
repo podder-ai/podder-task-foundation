@@ -47,8 +47,8 @@ class Text(Object):
     def to_json(self, indent: Optional[int] = None) -> str:
         return json.dumps(self.data, cls=NumpyJsonEncoder, ensure_ascii=False, indent=indent)
 
-    def to_array(self) -> [str]:
-        return self.data.strip().split("\n")
+    def to_array(self, separator: str = "\n") -> [str]:
+        return self.data.strip().split(separator)
 
     def _lazy_load(self):
         if self._data is None:
