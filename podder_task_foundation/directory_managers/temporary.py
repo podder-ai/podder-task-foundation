@@ -14,9 +14,12 @@ class Temporary(BaseDirectoryManager):
                  process_name: Optional[str],
                  base_path: Optional[str],
                  job_id: str,
-                 logger: BaseLogger,
+                 logger: Optional[BaseLogger],
                  debug_mode: bool = False):
         super().__init__(process_name, base_path, job_id, logger, debug_mode)
+        if base_path is not None:
+            self._base_path = Path(base_path).joinpath(job_id)
+
         self._base_root_path = self._base_path
         self._temporary_directory_object: Optional[tempfile.TemporaryDirectory] = None
         self._base_path = None
@@ -46,12 +49,14 @@ class Temporary(BaseDirectoryManager):
                 self._base_path = self._base_root_path.joinpath(self._process_name)
             else:
                 self._base_path = self._base_root_path
-            self._logger.debug(
-                "Create temporary directory for debugging ( won't be deleted ): {}".format(
-                    self._base_path.absolute()))
+            if self._logger:
+                self._logger.debug(
+                    "Create temporary directory for debugging ( won't be deleted ): {}".format(
+                        self._base_path.absolute()))
         else:
-            self._temporary_directory_object = tempfile.TemporaryDirectory(
-                prefix=self._job_id,
-                dir=self._base_root_path)
+            self._temporary_directory_object = tempfile.TemporaryDirectory(prefix=self._job_id,
+                                                                           dir=self._base_root_path)
             self._base_path = Path(self._temporary_directory_object.name)
-            self._logger.debug("Create temporary directory: {}".format(self._base_path.absolute()))
+            if self._logger:
+                self._logger.debug("Create temporary directory: {}".format(
+                    self._base_path.absolute()))
