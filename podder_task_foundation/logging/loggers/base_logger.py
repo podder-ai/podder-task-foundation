@@ -29,6 +29,13 @@ class BaseLogger(object):
         logger = logging.getLogger("console")
         return logger
 
+    def get_log_level(self) -> int:
+        return self._logger.level
+
+    def is_debug_level(self) -> bool:
+        log_level = self.get_log_level()
+        return log_level < 20
+
     def trace(self, msg, *args, **kwargs):
         self._format(self.TRACE_LOG_LEVEL, msg, extra=self._create_extra(), *args, **kwargs)
 

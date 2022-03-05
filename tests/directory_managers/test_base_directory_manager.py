@@ -10,12 +10,8 @@ def data_path() -> str:
     return str(Path(__file__).parent.parent.joinpath("data").absolute())
 
 
-def test_base_directory_manager_create():
-    manager = BaseDirectoryManager(None,
-                                   str(Path(__file__).parent.parent.joinpath("data")),
-                                   "jobid",
-                                   logger=None,
-                                   debug_mode=False)
+def test_base_directory_manager_create(data_path: str):
+    manager = BaseDirectoryManager(None, data_path, "jobid", logger=None, debug_mode=False)
 
     assert manager
 

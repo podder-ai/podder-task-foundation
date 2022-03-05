@@ -18,3 +18,11 @@ def test_logger_add_handler():
     null_handler = logging.NullHandler()
     context.logger.add_handler(null_handler)
     assert len(context.logger._logger.handlers) == before_handler_number + 1
+
+
+def test_process_context_log_level():
+    context = Context(mode=MODE.TEST, config_path=Path(__file__).parent.joinpath("data", "config"))
+
+    log_level = context.logger.get_log_level()
+
+    assert log_level > 0

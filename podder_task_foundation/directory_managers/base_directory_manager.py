@@ -20,7 +20,8 @@ class BaseDirectoryManager(object):
             self._base_path = None
         else:
             self._base_path = Path(base_path)
-            self._base_path = self._base_path.joinpath(job_id)
+            if self._process_name is not None:
+                self._base_path = self._base_path.joinpath(self._process_name)
 
         self._job_id = job_id
         self._logger = logger
