@@ -42,12 +42,16 @@ class Temporary(BaseDirectoryManager):
 
     def _create_temporary_file(self) -> None:
         if self._debug_mode:
-            self._base_path = self._base_root_path.joinpath(self._job_id)
+            if self._process_name:
+                self._base_path = self._base_root_path.joinpath(self._process_name)
+            else:
+                self._base_path = self._base_root_path
             self._logger.debug(
                 "Create temporary directory for debugging ( won't be deleted ): {}".format(
                     self._base_path.absolute()))
         else:
-            self._temporary_directory_object = tempfile.TemporaryDirectory(prefix=self._job_id,
-                                                                           dir=self._base_root_path)
+            self._temporary_directory_object = tempfile.TemporaryDirectory(
+                prefix=self._job_id,
+                dir=self._base_root_path)
             self._base_path = Path(self._temporary_directory_object.name)
             self._logger.debug("Create temporary directory: {}".format(self._base_path.absolute()))
