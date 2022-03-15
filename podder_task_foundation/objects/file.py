@@ -1,7 +1,7 @@
 import shutil
 import tempfile
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 from .object import Object
 
@@ -10,7 +10,14 @@ class File(Object):
     supported_extensions = []
     type = "file"
 
-    def __init__(self, data: Optional[Path] = None, name: Optional[str] = None):
+    def __init__(self,
+                 data: Union[None, Path, str] = None,
+                 path: Union[None, Path, str] = None,
+                 name: Optional[str] = None):
+        if data is None and path is not None:
+            data = path
+        if isinstance(data, str):
+            data = Path(data)
         self._temporary_directory_object = tempfile.TemporaryDirectory(prefix=name)
         copied_file_path = Path(self._temporary_directory_object.name).joinpath(data.name)
         shutil.copy(data, copied_file_path)
