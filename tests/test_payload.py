@@ -30,7 +30,7 @@ def test_payload_load_pdf():
     payload = Payload()
     payload.add_file(Path(__file__).parent.joinpath("data", "pdf_01.pdf"))
 
-    pdf_data = payload.get(object_type="pdf")
+    pdf_data = payload.get(object_type="file")
     assert pdf_data
 
 

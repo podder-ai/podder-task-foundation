@@ -8,11 +8,10 @@ from .dictionary import Dictionary
 from .directory import Directory
 from .file import File
 from .object import Object
-from .pdf import PDF
 from .text import Text
 
 _objects = ObjectPluginManager().get_classes()
-_objects.extend([PDF, Text, Dictionary, Array, CSV, Directory])
+_objects.extend([Text, Dictionary, Array, CSV, Directory])
 
 
 def factory(_file: Path) -> Optional[Object]:
