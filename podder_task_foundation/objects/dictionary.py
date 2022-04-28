@@ -9,6 +9,7 @@ from .text_serializable import TextSerializable
 class Dictionary(TextSerializable):
     _properties = OrderedDict({})
     type = "dictionary"
+    supported_object_type = dict
 
     def __getattr__(self, item):
         if item not in self.data.keys():

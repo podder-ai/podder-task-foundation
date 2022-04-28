@@ -15,6 +15,7 @@ class Text(Object):
     supported_extensions = [".text", ".txt"]
     type = "text"
     default_extension = ".txt"
+    supported_object_type = str
 
     def save(self,
              path: Path,
@@ -45,7 +46,20 @@ class Text(Object):
         return yaml.dump(self.data, indent=indent, allow_unicode=True)
 
     def to_json(self, indent: Optional[int] = None) -> str:
-        return json.dumps(self.data, cls=NumpyJsonEncoder, ensure_ascii=False, indent=indent)
+        return json.dumps(self.data,
+                          cls=NumpyJsonEncoder,
+                          ensure_ascii=False,
+                          indent=indent,
+                          default=self._object_serialize)
+
+    @staticmethod
+    def _object_serialize(_object):
+        if isinstance(_object, Path):
+            return str(_object)
+        try:
+            return _object.__class__ + ":" + str(_object)
+        except TypeError:
+            return _object.__class__
 
     def to_array(self, separator: str = "\n") -> [str]:
         return self.data.strip().split(separator)

@@ -1,11 +1,20 @@
-import copy
+import copy as python_copy
 import fnmatch
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Union
 
 from .exceptions import WrongDataFormatError
-from .objects import CSV, Array, Dictionary, Directory, Object, factory, get_class_from_type
+from .objects import (
+    CSV,
+    Array,
+    Dictionary,
+    Directory,
+    Object,
+    factory,
+    factory_from_object,
+    get_class_from_type,
+)
 
 
 class Payload(object):
@@ -64,7 +73,7 @@ class Payload(object):
 
     def add_file(self, file: Path, name: Optional[str] = None) -> bool:
         if file.is_dir():
-            return False
+            return self.add_directory(file, name=name)
         _object = factory(file)
         if _object is None:
             return False
@@ -73,6 +82,18 @@ class Payload(object):
         return True
 
     def add(self, _object: Object, name: Optional[str] = None):
+        if not isinstance(_object, Object):
+            if isinstance(_object, Path):
+                _object = factory(_object)
+            else:
+                wrapped_object = factory_from_object(_object, name)
+                if wrapped_object is None:
+                    _object = Object(data=_object, name=name)
+                else:
+                    _object = wrapped_object
+        if not isinstance(_object, Object):
+            _object = Object(data=_object, name=name)
+
         if name is not None:
             _object.rename(name)
 
@@ -136,7 +157,7 @@ class Payload(object):
         return set(keys)
 
     def copy(self) -> "Payload":
-        return copy.deepcopy(self)
+        return python_copy.deepcopy(self)
 
     def merge(self, target):
         for _object in target.all():

@@ -11,13 +11,17 @@ class Object(object):
     supported_extensions = [".pkl"]
     type = "object"
     default_extension = ".pkl"
+    supported_object_type = None
 
     def __init__(self,
                  data: Any = None,
                  path: Union[None, Path, str] = None,
                  name: Optional[str] = None):
 
-        self._data = copy.deepcopy(data) if data is not None else None
+        try:
+            self._data = copy.deepcopy(data) if data is not None else None
+        except TypeError:
+            self._data = copy.copy(data)
 
         if type(path) == str and path != "":
             self._path = Path(path)
@@ -84,8 +88,13 @@ class Object(object):
             path.touch()
             return True
 
-        with path.open(mode='wb', encoding=encoding) as file:
-            pickle.dump(self._data, file)
+        try:
+            with path.open(mode='wb') as file:
+                pickle.dump(self._data, file)
+        except TypeError:
+            path.write_text("Can't pickle this object")
+        except AttributeError:
+            path.write_text("Can't pickle this object")
 
         return True
 
@@ -123,6 +132,14 @@ class Object(object):
         if path.suffix in cls.supported_extensions:
             return True
 
+        return False
+
+    @classmethod
+    def is_supported_object(cls, _object: Any) -> bool:
+        if cls.supported_object_type is None:
+            return False
+        if isinstance(_object, cls.supported_object_type):
+            return True
         return False
 
     @classmethod

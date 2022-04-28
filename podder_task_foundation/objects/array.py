@@ -9,6 +9,7 @@ from .text_serializable import TextSerializable
 
 class Array(TextSerializable):
     type = "array"
+    supported_object_type = list
 
     def save(self,
              path: Path,

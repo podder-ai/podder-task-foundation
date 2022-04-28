@@ -10,7 +10,7 @@ class Parameters(object):
         if _name in self._parameters:
             return copy.deepcopy(self._parameters[_name])
 
-        return self.__getattribute__(_name)
+        raise AttributeError("'Parameters' object has no attribute '{}'".format(_name))
 
     def __getitem__(self, key: str):
         if key in self._parameters:
