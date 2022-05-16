@@ -18,10 +18,7 @@ class Object(object):
                  path: Union[None, Path, str] = None,
                  name: Optional[str] = None):
 
-        try:
-            self._data = copy.deepcopy(data) if data is not None else None
-        except TypeError:
-            self._data = copy.copy(data)
+        self._data = data
 
         if type(path) == str and path != "":
             self._path = Path(path)

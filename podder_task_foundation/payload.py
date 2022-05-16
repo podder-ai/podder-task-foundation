@@ -76,7 +76,11 @@ class Payload(object):
             return self.add_directory(file, name=name)
         _object = factory(file)
         if _object is None:
-            return False
+            raise WrongDataFormatError(
+                detail="The file you tried to add is not supported: {}".format(
+                    type(file.name)),
+                how_to_solve="You can convert into supported format or write plugin for the format"
+            )
         self.add(_object, name)
 
         return True
@@ -84,13 +88,16 @@ class Payload(object):
     def add(self, _object: Object, name: Optional[str] = None):
         if not isinstance(_object, Object):
             if isinstance(_object, Path):
-                _object = factory(_object)
+                raise WrongDataFormatError(
+                    detail="You can only add Podder Task Foundation Object to Payload."
+                           + " You tried to add file path.".format(type(_object)),
+                    how_to_solve="You can use add_file to add file")
             else:
-                wrapped_object = factory_from_object(_object, name)
-                if wrapped_object is None:
-                    _object = Object(data=_object, name=name)
-                else:
-                    _object = wrapped_object
+                raise WrongDataFormatError(
+                    detail="You can only add Podder Task Foundation Object to Payload."
+                           + " You tried to add {}.".format(type(_object)),
+                    how_to_solve="You can wrap it with podder_task_foundation.objects."
+                                 + "Object or change to the supported objects")
         if not isinstance(_object, Object):
             _object = Object(data=_object, name=name)
 
@@ -197,7 +204,6 @@ class Payload(object):
             _type = _name[4:]
             _object = get_class_from_type(_type)
             if _object is not None:
-
                 def _add_object(data: Any, name: Optional[str] = None) -> Object:
                     instance = _object(data=data, name=name)
                     self.add(instance)
