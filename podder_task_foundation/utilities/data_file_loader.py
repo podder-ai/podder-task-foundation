@@ -1,5 +1,6 @@
 import csv
 import json
+import pickle
 from collections import OrderedDict
 from pathlib import Path
 from typing import Dict, List, Optional, Union
@@ -25,7 +26,8 @@ class DataFileLoader(object):
         ".toml": "toml",
         ".csv": "csv",
         ".txt": "text",
-        ".text": "text"
+        ".text": "text",
+        ".pkl": "pickle"
     }
 
     def __init__(self):
@@ -50,6 +52,9 @@ class DataFileLoader(object):
                     data.append(row)
         elif file_format == "text":
             data = path.read_text(encoding=encoding)
+        elif file_format == "pickle":
+            with path.open(mode='rb') as file_handler:
+                data = pickle.load(file_handler)
 
         return data
 
