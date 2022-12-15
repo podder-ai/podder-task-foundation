@@ -50,6 +50,12 @@ class Directory(Object):
 
         return True
 
+    def get_file_name(self, base_path: Optional[Path] = None) -> Path:
+        path = base_path
+        if base_path is None:
+            path = Path(self._name)
+        return path
+
     @classmethod
     def load(cls, path: Path, name: Optional[str] = None) -> "Directory":
         if not path.is_dir():
