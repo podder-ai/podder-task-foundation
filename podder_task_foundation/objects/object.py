@@ -4,7 +4,7 @@ import shutil
 from pathlib import Path
 from typing import Any, Optional, Union
 
-from ..utilities import Strings
+from ..utilities import Strings, DataFileLoader
 
 
 class Object(object):
@@ -41,7 +41,7 @@ class Object(object):
         return self.to_str()
 
     def _lazy_load(self):
-        pass
+        self._data = DataFileLoader().load(self.path)
 
     def to_repr(self) -> str:
         return "<Type: {}>".format(self.type)
@@ -88,10 +88,10 @@ class Object(object):
         try:
             with path.open(mode='wb') as file:
                 pickle.dump(self._data, file)
-        except TypeError:
-            path.write_text("Can't pickle this object")
-        except AttributeError:
-            path.write_text("Can't pickle this object")
+        except TypeError as e:
+            path.write_text("Can't pickle this object. Error: {}".format(e))
+        except AttributeError as e:
+            path.write_text("Can't pickle this object. Error: {}".format(e))
 
         return True
 
