@@ -99,7 +99,7 @@ class ProcessExecutor(object):
         _input = Payload()
         for name, path in files:
             if path.is_dir():
-                _input.add_directory(directory=path)
+                _input.add_directory(directory=path, name=name)
             else:
                 _input.add_file(file=path, name=name)
 
