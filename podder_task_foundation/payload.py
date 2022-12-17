@@ -12,12 +12,13 @@ from .objects import (
     Directory,
     Object,
     factory,
-    factory_from_object,
     get_class_from_type,
 )
 
 
 class Payload(object):
+    __slots__ = ('_data',)
+
     def __init__(self):
         self._data: [Object] = []
 

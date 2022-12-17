@@ -13,6 +13,25 @@ from .utilities import UID, ProcessManager
 
 
 class Context(object):
+    __slots__ = (
+        '_config',
+        '_shared_config',
+        '_mode',
+        '_debug_mode',
+        '_verbose',
+        '_job_id',
+        '_process_id',
+        '_process_name',
+        '_config_path',
+        '_process_manager',
+        '_custom_data',
+        '_parameters',
+        '_logger',
+        '_file',
+        '_version',
+        '_process_list',
+    )
+
     @classmethod
     def copy(
         cls,
