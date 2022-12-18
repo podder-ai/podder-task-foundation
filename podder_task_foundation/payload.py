@@ -5,24 +5,18 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Union
 
 from .exceptions import WrongDataFormatError
-from .objects import (
-    CSV,
-    Array,
-    Dictionary,
-    Directory,
-    Object,
-    factory,
-    get_class_from_type,
-)
+from .objects import CSV, Array, Dictionary, Directory, Object, factory, get_class_from_type
 
 
 class Payload(object):
-    __slots__ = ('_data',)
+    __slots__ = ('_data', )
 
     def __init__(self):
         self._data: [Object] = []
 
     def __getitem__(self, name):
+        if isinstance(name, int):
+            return self._data[name]
         return self.get(name=name)
 
     def __len__(self):
@@ -78,10 +72,8 @@ class Payload(object):
         _object = factory(file)
         if _object is None:
             raise WrongDataFormatError(
-                detail="The file you tried to add is not supported: {}".format(
-                    type(file.name)),
-                how_to_solve="You can convert into supported format or write plugin for the format"
-            )
+                detail="The file you tried to add is not supported: {}".format(type(file.name)),
+                how_to_solve="You can convert into supported format or write plugin for the format")
         self.add(_object, name)
 
         return True
@@ -90,15 +82,15 @@ class Payload(object):
         if not isinstance(_object, Object):
             if isinstance(_object, Path):
                 raise WrongDataFormatError(
-                    detail="You can only add Podder Task Foundation Object to Payload."
-                           + " You tried to add file path.".format(type(_object)),
+                    detail="You can only add Podder Task Foundation Object to Payload." +
+                    " You tried to add file path.".format(type(_object)),
                     how_to_solve="You can use add_file to add file")
             else:
                 raise WrongDataFormatError(
-                    detail="You can only add Podder Task Foundation Object to Payload."
-                           + " You tried to add {}.".format(type(_object)),
-                    how_to_solve="You can wrap it with podder_task_foundation.objects."
-                                 + "Object or change to the supported objects")
+                    detail="You can only add Podder Task Foundation Object to Payload." +
+                    " You tried to add {}.".format(type(_object)),
+                    how_to_solve="You can wrap it with podder_task_foundation.objects." +
+                    "Object or change to the supported objects")
         if not isinstance(_object, Object):
             _object = Object(data=_object, name=name)
 
@@ -205,6 +197,7 @@ class Payload(object):
             _type = _name[4:]
             _object = get_class_from_type(_type)
             if _object is not None:
+
                 def _add_object(data: Any, name: Optional[str] = None) -> Object:
                     instance = _object(data=data, name=name)
                     self.add(instance)

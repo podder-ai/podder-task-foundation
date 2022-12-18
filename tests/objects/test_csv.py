@@ -34,7 +34,8 @@ def test_csv_get_as_dict(data_path):
 
     data = _object.get(data_format="dict")
     assert isinstance(data, list)
-    assert isinstance(data[0], OrderedDict)
+    print(type(data[0]))
+    assert isinstance(data[0], dict)
 
 
 def test_csv_get_data_after_get_as_dict(data_path):
@@ -43,7 +44,7 @@ def test_csv_get_data_after_get_as_dict(data_path):
 
     data = _object.get(data_format="dict")
     assert isinstance(data, list)
-    assert isinstance(data[0], OrderedDict)
+    assert isinstance(data[0], dict)
 
     data = _object.data
     assert isinstance(data, list)

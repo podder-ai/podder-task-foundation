@@ -13,7 +13,10 @@ from .utilities import Strings
 
 
 class ProcessExecutor(object):
-    __slots__ = ("_no_name_key", "_context",)
+    __slots__ = (
+        "_no_name_key",
+        "_context",
+    )
 
     _NO_NAME_PREFIX = "NO_NAME_"
 

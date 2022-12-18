@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 
 
 class Parameters(object):
-    __slots__ = ('_parameters',)
+    __slots__ = ('_parameters', )
 
     def __init__(self, parameters: Dict[str, Any]):
         self._parameters = parameters
