@@ -19,6 +19,6 @@ class Bootstrap(object):
         processes = self._context.process_manager.get_process_list()
         for name, process in processes.items():
             process_object = importlib.import_module('processes.{}.process'.format(name))
-            process_object.bootstrap(self._context.mode, process)
+            process_object.Process.bootstrap(self._context.mode, self._context)
 
         return True

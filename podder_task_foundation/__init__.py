@@ -15,4 +15,4 @@ __all__ = [
     "ProcessExecutor", "Parameters", "bootstrap", "__version__"
 ]
 
-__version__ = '0.2.19'
+__version__ = '0.2.20'
