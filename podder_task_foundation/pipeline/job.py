@@ -3,6 +3,7 @@ from ..process import Process
 
 
 class Job(object):
+
     def __init__(self, process: Process):
         self._process = process
 

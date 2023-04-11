@@ -8,6 +8,7 @@ from .base_logger import BaseLogger
 
 
 class ProcessLogger(BaseLogger):
+
     def __init__(self,
                  mode: str,
                  config: Config,

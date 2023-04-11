@@ -6,6 +6,7 @@ from podder_task_foundation.config.parsers.base_config_parser import BaseConfigP
 
 
 class JsonConfigParser(BaseConfigParser):
+
     @classmethod
     def name(cls) -> str:
         return "json"

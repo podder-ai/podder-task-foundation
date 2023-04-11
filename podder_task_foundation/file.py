@@ -11,6 +11,7 @@ class File(object):
     File assessor
     All tasks need to access file through this class
     """
+
     def __init__(self,
                  process_name: str,
                  config: Config,

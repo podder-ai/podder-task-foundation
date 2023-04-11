@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Union
 
 from .exceptions import WrongDataFormatError
-from .objects import CSV, Array, Dictionary, Directory, Object, factory, get_class_from_type
+from .objects import CSV, Array, Dictionary, Directory, Object, Text, factory, get_class_from_type
 
 
 class Payload(object):
@@ -74,7 +74,13 @@ class Payload(object):
             raise WrongDataFormatError(
                 detail="The file you tried to add is not supported: {}".format(type(file.name)),
                 how_to_solve="You can convert into supported format or write plugin for the format")
-        self.add(_object, name)
+        self.add(_object, name=name)
+
+        return True
+
+    def add_text(self, text: str, name: Optional[str] = None) -> bool:
+        _object = Text(data=text, name=name)
+        self.add(_object, name=name)
 
         return True
 

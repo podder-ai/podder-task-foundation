@@ -6,6 +6,7 @@ from .config_file import ConfigFile
 
 
 class SharedConfig(Config):
+
     def _load_config_directory(self, path: Path) -> Optional[dict]:
         data = {}
         for config in path.iterdir():

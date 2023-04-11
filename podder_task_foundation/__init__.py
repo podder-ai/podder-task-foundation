@@ -1,3 +1,4 @@
+from .bootstrap import bootstrap
 from .cli import CLI
 from .context import Context
 from .data_bag import DataBag
@@ -11,7 +12,7 @@ from .singleton import Singleton
 
 __all__ = [
     'Context', 'DataBag', 'MODE', 'Process', 'Payload', 'Singleton', "CLI", "Pipeline",
-    "ProcessExecutor", "Parameters", "__version__"
+    "ProcessExecutor", "Parameters", "bootstrap", "__version__"
 ]
 
-__version__ = '0.2.18'
+__version__ = '0.2.19'

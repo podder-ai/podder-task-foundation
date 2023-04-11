@@ -6,6 +6,7 @@ from .parameters import Parameters
 
 
 class CLI(object):
+
     def __init__(self):
         self._command_names = []
         self._parser = self._get_parser()

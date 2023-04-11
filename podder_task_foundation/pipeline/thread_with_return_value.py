@@ -3,6 +3,7 @@ from typing import Any
 
 
 class ThreadWithReturnValue(threading.Thread):
+
     def __init__(self, group=None, target=None, name=None, args=(), kwargs=None):
 
         threading.Thread.__init__(self, group, target, name, args, kwargs)

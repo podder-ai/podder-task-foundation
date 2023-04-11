@@ -10,6 +10,7 @@ from .pipe import Pipe
 
 
 class Pipeline(object):
+
     def __init__(self, blueprint: dict, context: Context):
         self._blueprint: dict = blueprint
         self._pipeline: Optional[Pipe] = None

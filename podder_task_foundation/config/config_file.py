@@ -10,6 +10,7 @@ _all_parsers = [
 
 
 class ConfigFile(object):
+
     def __init__(self, file: Path):
         self._file = file
 

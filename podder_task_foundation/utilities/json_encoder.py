@@ -3,6 +3,7 @@ import json
 
 
 class NumpyJsonEncoder(json.JSONEncoder):
+
     def default(self, obj):
         try:
             numpy = importlib.import_module("numpy")

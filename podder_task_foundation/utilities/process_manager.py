@@ -1,3 +1,4 @@
+import importlib
 from pathlib import Path
 from typing import Dict, Optional
 
@@ -5,6 +6,7 @@ from ..config import ProcessConfig, SharedConfig
 
 
 class ProcessManager(object):
+
     def __init__(self, mode: str, shared_config: SharedConfig = None, debug_mode: bool = False):
         self._mode = mode
         self._shared_config = shared_config

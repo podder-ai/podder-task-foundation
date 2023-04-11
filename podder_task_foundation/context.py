@@ -116,6 +116,10 @@ class Context(object):
     def custom_data(self) -> DataBag:
         return self._custom_data
 
+    @property
+    def process_manager(self) -> ProcessManager:
+        return self._process_manager
+
     def __init__(self,
                  mode: str,
                  process_name: Optional[str] = None,

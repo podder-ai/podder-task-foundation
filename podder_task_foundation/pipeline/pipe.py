@@ -4,6 +4,7 @@ from .unit import Unit
 
 
 class Pipe(Unit):
+
     class Type:
         SERIAL = "serial"
         PARALLEL = "parallel"

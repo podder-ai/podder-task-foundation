@@ -2,6 +2,7 @@ import logging
 
 
 class StreamToLogger(object):
+
     def __init__(self, logger, log_level=logging.INFO):
         self._logger = logger
         self._log_level = log_level

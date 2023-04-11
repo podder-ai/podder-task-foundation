@@ -14,6 +14,7 @@ yaml.add_representer(OrderedDict, represent_odict)
 
 
 class YamlConfigParser(BaseConfigParser):
+
     @classmethod
     def name(cls) -> str:
         return "yaml"

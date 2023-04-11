@@ -3,6 +3,7 @@ from pathlib import Path
 
 
 class BaseConfigParser(metaclass=ABCMeta):
+
     @classmethod
     @abstractmethod
     def name(cls) -> str:

@@ -4,6 +4,7 @@ from argparse import Namespace
 from pathlib import Path
 from typing import Dict, Union
 
+from ..bootstrap import bootstrap
 from ..mode import MODE
 from ..parameters import Parameters
 from ..process_executor import ProcessExecutor
@@ -63,6 +64,7 @@ class Execute(Command):
                                            verbose=arguments.verbose,
                                            debug_mode=arguments.debug,
                                            parameters=unknown_arguments)
+        bootstrap(process_executor.context)
 
         output_files = arguments.output
         output_exists, should_output_to_directory, output_paths = self.check_output_type(

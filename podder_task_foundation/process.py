@@ -11,6 +11,11 @@ from .payload import Payload
 
 
 class Process(object):
+
+    @classmethod
+    def bootstrap(cls, mode: str, context: Optional[Context] = None) -> None:
+        pass
+
     def __init__(self, mode: str, context: Optional[Context] = None) -> None:
         if context is None:
             context = Context(mode, self._get_process_name())
